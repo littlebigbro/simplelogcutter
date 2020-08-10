@@ -1,0 +1,395 @@
+07-28;07:30:53.803 DEBUG [.kernel.Default (self-tuning)'][                   SumApplCashFTaxPbs_lc]: Лог перехода toCancel для документа d7673475-08eb-4def-97eb-72e00ed0b00f с типом MSC_SumApplCashFTax_PBS: Результат для документа: guid=d7673475-08eb-4def-97eb-72e00ed0b00f , doctype=MSC_SumApplCashFTax_PBS , docservice=EXP
+[Лог обработки]: Начало выполнения перехода toCancel (К отмене документа) ЖЦ SumApplCashFTaxPbs_lc
+Начало выполнения действия ЖЦ Load_GlobalDocId (Загружает ГУИД документа в переменную)
+Запрашивается параметр fieldName для операции Load_GlobalDocId. Требуемый класс STRING. Получено значение globalDocId
+Запрашивается параметр loadInto для операции Load_GlobalDocId. Требуемый класс STRING.Значение по умолчанию null. Получено значение vGUID
+Операция Load_GlobalDocId выставляет значение d7673475-08eb-4def-97eb-72e00ed0b00f в параметр vGUID с типом UUID. Значение будет доступно в переменной с именем vGUID
+Выполнение операции Load_GlobalDocId перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 6 ms
+Начало выполнения действия ЖЦ guid_to_string_with_formatCall (Форматировать ГУИД  в STRING через formatCall)
+Запрашивается параметр format для операции guid_to_string_with_formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции guid_to_string_with_formatCall. Требуемый класс UUID.Значение по умолчанию null. Получено значение d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр resultFieldName для операции guid_to_string_with_formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции guid_to_string_with_formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение vGUID
+Операция guid_to_string_with_formatCall выставляет значение d7673475-08eb-4def-97eb-72e00ed0b00f в параметр vGUID с типом STRING. Значение будет доступно в переменной с именем vGUID
+Выполнение операции guid_to_string_with_formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 0 ms
+Начало выполнения действия ЖЦ updateTableValuesCall (Отмена из ПП: Обновить технический признаки SIGN_PA_EXEC в таблице для конкретного ПП значением 'N')
+Выполняется проверка условий для экшена updateTableValuesCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия vPO.globalDocId (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена updateTableValuesCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ countTableRowsCall (Отмена из ПП: Подсчитать не отмененные ПП)
+Выполняется проверка условий для экшена countTableRowsCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена не пройдена countTableRowsCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ countTableRowsCall (Отмена из ПП: Подсчитать не обработанные ПП)
+Выполняется проверка условий для экшена countTableRowsCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена не пройдена countTableRowsCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ Table_sum_all (Отмена из ПП: Если нет необработанных ПП, то подсчет исполненной суммы)
+Выполняется проверка условий для экшена Table_sum_all, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена не пройдена Table_sum_all для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ countTableRowsCall (Отмена из ПП: Если все обработаны, то подсчитать Исполненные ПП)
+Выполняется проверка условий для экшена countTableRowsCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена не пройдена countTableRowsCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ countTableRowsCall (Отмена из ПП: Если все обработаны, то подсчитать строки со статусом квитанции != 14)
+Выполняется проверка условий для экшена countTableRowsCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена не пройдена countTableRowsCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ ChangeState (Отмена из ПП: Если есть необработанные ПП, то остаемся на - Зарегистрирован)
+Выполняется проверка условий для экшена ChangeState, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия countPOUnexec (null) > 0, результат: false
+Проверка условий для экшена не пройдена ChangeState для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ ChangeState (Отмена из ПП: Если все ПП обработаны и есть Исполненные ПП, то смены статуса на - Исполнен частично)
+Выполняется проверка условий для экшена ChangeState, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия countPOnull (null) = 0, результат: false
+Проверка условий для экшена не пройдена ChangeState для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ fillDocFieldByFilteredTableColumnValueLCall (Отмена из ПП: формирование тех. ошибки: Заполнить номер строки)
+Выполняется проверка условий для экшена fillDocFieldByFilteredTableColumnValueLCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия vPO.globalDocId (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена fillDocFieldByFilteredTableColumnValueLCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ formatCall (Отмена из ПП: формирование тех. ошибки: текст)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат группы OR: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 4, результат: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 14, результат: false
+Проверка условий для экшена не пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ ConvertParam (Отмена из ПП: Конвертация с сообщения в TEXT)
+Выполняется проверка условий для экшена ConvertParam, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия vTECH_MESSAGE (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена ConvertParam для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ updateTableValuesCall (Отмена из ПП: формирование тех. ошибки: запись в таблицу ошибок)
+Выполняется проверка условий для экшена updateTableValuesCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат группы OR: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 4, результат: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 14, результат: false
+Проверка условий для экшена не пройдена updateTableValuesCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ copyTableCall (Отмена из ПП: Копирование из квитанции в таблицу ошибок.)
+Выполняется проверка условий для экшена copyTableCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат группы OR: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 4, результат: false
+ | | | проверка условия vSYNC.DOC.RESULT (null) = 14, результат: false
+Проверка условий для экшена не пройдена copyTableCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ formatCall (Отмена из ПП: Фонарь Банк красный: Форматировать vSYNC.DOC.RCPTDTTM в %tY-%tm-%td)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия vSYNC.DOC.RCPTDTTM (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ ConvertParam (Отмена из ПП: Конвертация vSYNC.DOC.RCPTDTTM в DATE)
+Выполняется проверка условий для экшена ConvertParam, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия vSYNC.DOC.RCPTDTTM (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена ConvertParam для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ setFieldValueCall (Отмена из ПП: Выставление vSYNC.DOC.RCPTDTTM в Дата отказа ПП [DOC.SI_DATEOFACCSTRN])
+Выполняется проверка условий для экшена setFieldValueCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия vSYNC.DOC.RCPTDTTM (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена setFieldValueCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ clearTechSign (Отмена из ПП: Удалить ГУИД ПП в случае, если все ПП были отменены)
+Выполняется проверка условий для экшена clearTechSign, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия countPOUnexec (null) = 0, результат: false
+Проверка условий для экшена не пройдена clearTechSign для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ concatTabelFieldToHead (Отмена из ПП: Если статус квитанции 4 или 14, то заполняется DOC.SI_RECEIPTPUR_EB_RSLT статусом квитанции из vSYNC.DOC.RESULT)
+Выполняется проверка условий для экшена concatTabelFieldToHead, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия countPOUnexec (null) = 0, результат: false
+Проверка условий для экшена не пройдена concatTabelFieldToHead для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ SetLAMPGROUPFK (Отмена из ПП: Если хотябы по 1 квитанции статус НЕ 14: Заполнение фонаря ФК красным)
+Выполняется проверка условий для экшена SetLAMPGROUPFK, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы OR: true
+ | |\ результат группы AND: false
+ | | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+ | |\ результат условия NOT: true
+ | | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена пройдена SetLAMPGROUPFK для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр fieldValue для операции SetLAMPGROUPFK. Требуемый класс STRING.Значение по умолчанию null. Получено значение l4
+Запрашивается параметр fieldName для операции SetLAMPGROUPFK. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.SI_LAMPGROUPFK
+Выполнение операции SetLAMPGROUPFK перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 0 ms
+Начало выполнения действия ЖЦ SetLAMPGROUPBANK (Отмена из ПП: Если у всех квитанции статус = 14, то: Заполнение фонаря Банк красным)
+Выполняется проверка условий для экшена SetLAMPGROUPBANK, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия countPOReqNot14 (null) = 0, результат: false
+Проверка условий для экшена не пройдена SetLAMPGROUPBANK для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ saveCall (Выполняет сохранение документа)
+Выполнение операции saveCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 26 ms
+Начало выполнения действия ЖЦ push_EDI_byTable (Если текущий документ аннулируется ЗОЗ-ом, то отмена связанных ПП.)
+Выполняется проверка условий для экшена push_EDI_byTable, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия vProtocolSource (null) = MSC_CANCDOC_REQ, результат: false
+Проверка условий для экшена не пройдена push_EDI_byTable для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ loadFieldValueCall (Загружает значение поля документа в переменную vZK_AMOUNT)
+Запрашивается параметр fieldName для операции loadFieldValueCall. Требуемый класс STRING. Получено значение DOC.ZK_AMOUNT
+Запрашивается параметр loadInto для операции loadFieldValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение vZK_AMOUNT
+Операция loadFieldValueCall выставляет значение 2.08 в параметр vZK_AMOUNT с типом DECIMAL. Значение будет доступно в переменной с именем vZK_AMOUNT
+Выполнение операции loadFieldValueCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 0 ms
+Начало выполнения действия ЖЦ loadFieldValueCall (Загружает значение поля документа в переменную vZK_AMOUNTEXEC)
+Запрашивается параметр fieldName для операции loadFieldValueCall. Требуемый класс STRING. Получено значение DOC.ZK_AMOUNTEXEC
+Запрашивается параметр loadInto для операции loadFieldValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение vZK_AMOUNTEXEC
+Операция loadFieldValueCall выставляет значение null в параметр vZK_AMOUNTEXEC с типом DECIMAL. Значение будет доступно в переменной с именем vZK_AMOUNTEXEC
+Выполнение операции loadFieldValueCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 0 ms
+Начало выполнения действия ЖЦ formatCall (Формируем vZK_AMOUNTEXEC  =  0 если поле  ZK_AMOUNTEXEC пусто)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия DOC.ZK_AMOUNTEXEC (null) IS NULL, результат: true
+Проверка условий для экшена пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр format для операции formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение 0
+Запрашивается параметр resultFieldName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение vZK_AMOUNTEXEC
+Операция formatCall выставляет значение 0 в параметр vZK_AMOUNTEXEC с типом STRING. Значение будет доступно в переменной с именем vZK_AMOUNTEXEC
+Выполнение операции formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 2 ms
+Начало выполнения действия ЖЦ fllStringToDecimal (Преобразовать строку в десятичное число)
+Выполняется проверка условий для экшена fllStringToDecimal, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия DOC.ZK_AMOUNTEXEC (null) IS NULL, результат: true
+Проверка условий для экшена пройдена fllStringToDecimal для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр vZK_AMOUNTEXEC для операции fllStringToDecimal. Требуемый класс STRING.Значение по умолчанию null. Получено значение 0
+Запрашивается параметр round для операции fllStringToDecimal. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр paramName для операции fllStringToDecimal. Требуемый класс STRING.Значение по умолчанию null. Получено значение vZK_AMOUNTEXEC
+Операция fllStringToDecimal выставляет значение 0 в параметр vZK_AMOUNTEXEC с типом DECIMAL. Значение будет доступно в переменной с именем vZK_AMOUNTEXEC
+Выполнение операции fllStringToDecimal перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 3 ms
+Начало выполнения действия ЖЦ calculateCall (Расчет по арифметическим выражениям paramSumDOC_DOC)
+Запрашивается параметр formula для операции calculateCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение a-b
+Запрашивается параметр a для операции calculateCall. Требуемый класс DECIMAL.Значение по умолчанию null. Получено значение 2.08
+Запрашивается параметр b для операции calculateCall. Требуемый класс DECIMAL.Значение по умолчанию null. Получено значение 0
+Запрашивается параметр typeRound для операции calculateCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр fraction для операции calculateCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение 2
+Запрашивается параметр targetFieldName для операции calculateCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр targetParam для операции calculateCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение paramSumDOC_DOC
+Операция calculateCall выставляет значение 2.08 в параметр paramSumDOC_DOC с типом DECIMAL. Значение будет доступно в переменной с именем paramSumDOC_DOC
+Выполнение операции calculateCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 3 ms
+Начало выполнения действия ЖЦ formatCall (Формируем paramSumDOC_DOC)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: true
+ | | проверка условия paramSumDOC_DOC (2.08) IS NULL, результат: false
+Проверка условий для экшена пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр format для операции formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции formatCall. Требуемый класс DECIMAL.Значение по умолчанию null. Получено значение 2.08
+Запрашивается параметр resultFieldName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение paramSumDOC_DOC
+Операция formatCall выставляет значение 2.08 в параметр paramSumDOC_DOC с типом STRING. Значение будет доступно в переменной с именем paramSumDOC_DOC
+Выполнение операции formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ loadManyFieldsValueCall (Загружает значения полей документа в переменные)
+Выполняется проверка условий для экшена loadManyFieldsValueCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы OR: true
+ | |\ результат группы AND: false
+ | | | проверка условия countPOUnexec (null) = 0, результат: false
+ | |\ результат условия NOT: true
+ | | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена пройдена loadManyFieldsValueCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр vGuid для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение globalDocId
+Запрашивается параметр paramPI_RECIPIENTCODE для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.Z_SOURCE
+Запрашивается параметр DBDdocType.systemName для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение docType.systemName
+Запрашивается параметр paramSrcDocGUID для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.INF_GUID
+Запрашивается параметр paramDI_CONSOLEREGCODE для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.SI_TF_ORGSYSNAME
+Запрашивается параметр paramDI_NUMDOC для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.Z_REQUESTNUM
+Запрашивается параметр paramDI_DATEDOC для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.INF_CREATIONDATE
+Запрашивается параметр paramDI_BUDGNAME для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.BT_NAME
+Запрашивается параметр paramCR_FULLNAME для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.CUS_FULLNAME
+Запрашивается параметр paramOFKS_CODE для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.ORFK_CODE
+Запрашивается параметр paramOFKS_NAME для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.ORFK_NAME
+Запрашивается параметр paramCR_ACCOUNTNUMBER для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.CUS_ACCOUNTNUMBER
+Запрашивается параметр paramDI_CONSOLEREGCODE для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.CUS_CODE
+Запрашивается параметр paramDI_FONAME для операции loadManyFieldsValueCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.FI_FINANCIALINST
+Операция loadManyFieldsValueCall выставляет значение d7673475-08eb-4def-97eb-72e00ed0b00f в параметр vGuid с типом UUID. Значение будет доступно в переменной с именем vGuid
+Операция loadManyFieldsValueCall выставляет значение СУФД в параметр paramPI_RECIPIENTCODE с типом ENUM. Значение будет доступно в переменной с именем paramPI_RECIPIENTCODE
+Операция loadManyFieldsValueCall выставляет значение MSC_SumApplCashFTax_PBS в параметр DBDdocType.systemName с типом STRING. Значение будет доступно в переменной с именем DBDdocType.systemName
+Операция loadManyFieldsValueCall выставляет значение d7673475-08eb-4def-97eb-72e00ed0b00f в параметр paramSrcDocGUID с типом STRING. Значение будет доступно в переменной с именем paramSrcDocGUID
+Операция loadManyFieldsValueCall выставляет значение 00107374 в параметр paramDI_CONSOLEREGCODE с типом STRING. Значение будет доступно в переменной с именем paramDI_CONSOLEREGCODE
+Операция loadManyFieldsValueCall выставляет значение 00011 в параметр paramDI_NUMDOC с типом STRING. Значение будет доступно в переменной с именем paramDI_NUMDOC
+Операция loadManyFieldsValueCall выставляет значение 2020-07-28 в параметр paramDI_DATEDOC с типом DATE. Значение будет доступно в переменной с именем paramDI_DATEDOC
+Операция loadManyFieldsValueCall выставляет значение Федеральный бюджет в параметр paramDI_BUDGNAME с типом STRING. Значение будет доступно в переменной с именем paramDI_BUDGNAME
+Операция loadManyFieldsValueCall выставляет значение ФГКУ "14 ОТРЯД ФПС ПО САРАТОВСКОЙ ОБЛАСТИ" в параметр paramCR_FULLNAME с типом STRING. Значение будет доступно в переменной с именем paramCR_FULLNAME
+Операция loadManyFieldsValueCall выставляет значение 6000 в параметр paramOFKS_CODE с типом STRING. Значение будет доступно в переменной с именем paramOFKS_CODE
+Операция loadManyFieldsValueCall выставляет значение Управление Федерального казначейства по Саратовской области в параметр paramOFKS_NAME с типом STRING. Значение будет доступно в переменной с именем paramOFKS_NAME
+Операция loadManyFieldsValueCall выставляет значение 03601863340 в параметр paramCR_ACCOUNTNUMBER с типом STRING. Значение будет доступно в переменной с именем paramCR_ACCOUNTNUMBER
+Операция loadManyFieldsValueCall выставляет значение 00186334 в параметр paramDI_CONSOLEREGCODE с типом STRING. Значение будет доступно в переменной с именем paramDI_CONSOLEREGCODE
+Операция loadManyFieldsValueCall выставляет значение Министерство финансов Российской Федерации в параметр paramDI_FONAME с типом STRING. Значение будет доступно в переменной с именем paramDI_FONAME
+Выполнение операции loadManyFieldsValueCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 2 ms
+Начало выполнения действия ЖЦ simpleSelectWithFilterQueryCall (Ищем недостающие реквизиты из СР для протокола (Уникальный номер организации клиента))
+Выполняется проверка условий для экшена simpleSelectWithFilterQueryCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы OR: true
+ | |\ результат условия NOT: true
+ | | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена пройдена simpleSelectWithFilterQueryCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр DOC_SYS_NAME для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING. Получено значение REF_UBPandNUBP
+Запрашивается параметр FILTER_QUERY для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING. Получено значение fields.DICT.ORGCODE = #{DOC.CUS_CODE} and fields.DICT.STATUS = 'ACTIVE'
+Запрашивается параметр RESULT_PARAM_NAME для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение SR
+Запрашивается параметр FIELDS для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение DICT.REGISTRYCODE
+Запрашивается параметр FIELD_TYPES для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр MULTIPLE для операции simpleSelectWithFilterQueryCall. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр SELECT_ONLY_FIRST для операции simpleSelectWithFilterQueryCall. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр FILTER_MAPPING для операции simpleSelectWithFilterQueryCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Операция simpleSelectWithFilterQueryCall выставляет значение 86334 в параметр SR.DICT.REGISTRYCODE с типом STRING. Значение будет доступно в переменной с именем SR.DICT.REGISTRYCODE
+Выполнение операции simpleSelectWithFilterQueryCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 7 ms
+Начало выполнения действия ЖЦ formatCall (SR.DICT.REGISTRYCODE -> paramDI_UNICNUMORG)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: true
+ | |\ результат условия NOT: true
+ | | | проверка условия SR.DICT.REGISTRYCODE (86334) IS NULL, результат: false
+ | |\ результат группы OR: true
+ | | |\ результат условия NOT: true
+ | | | | проверка условия vProtocolSource (null) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр format для операции formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение 86334
+Запрашивается параметр resultFieldName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение paramDI_UNICNUMORG
+Операция formatCall выставляет значение 86334 в параметр paramDI_UNICNUMORG с типом STRING. Значение будет доступно в переменной с именем paramDI_UNICNUMORG
+Выполнение операции formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ formatCall (Если vProtocolSource = пусто, то формируем vProtocolSource = PUR)
+Выполняется проверка условий для экшена formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ | проверка условия vProtocolSource (null) IS NULL, результат: true
+Проверка условий для экшена пройдена formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр format для операции formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение PUR
+Запрашивается параметр resultFieldName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение vProtocolSource
+Операция formatCall выставляет значение PUR в параметр vProtocolSource с типом STRING. Значение будет доступно в переменной с именем vProtocolSource
+Выполнение операции formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ guid_to_string_with_formatCall (Форматировать ГУИД  в STRING через formatCall)
+Выполняется проверка условий для экшена guid_to_string_with_formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия paramGUIDnewProtocol (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена guid_to_string_with_formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ Create_Protocol (Вызов создания протокола)
+Выполняется проверка условий для экшена Create_Protocol, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы OR: true
+ | |\ результат группы AND: false
+ | | | проверка условия countPOUnexec (null) = 0, результат: false
+ | |\ результат группы AND: true
+ | | |\ результат условия NOT: true
+ | | | | проверка условия vProtocolSource (PUR) = MSC_PAYM_ORDER_PBS, результат: false
+ | | | проверка условия sdo.DOC.MA_GUID_MSC_PROTOKOL (null) IS NULL, результат: true
+Проверка условий для экшена пройдена Create_Protocol для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр docTypeName для операции Create_Protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение MSC_Protocol
+Запрашивается параметр documentGuids для операции Create_Protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр documentGuidList для операции Create_Protocol. Требуемый класс -.Значение по умолчанию null. Получено значение null
+Запрашивается параметр linkType для операции Create_Protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр transitionId для операции Create_Protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение CreateProtocolSBR
+Запрашивается параметр useOrgFromDoc для операции Create_Protocol. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр initialFill для операции Create_Protocol. Требуемый класс BOOLEAN.Значение по умолчанию true. Получено значение true
+Запрашивается параметр createdDocumentGuidParamName для операции Create_Protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение paramGUIDnewProtocol
+Операция Create_Protocol выставляет значение b9c45e4e-4267-443d-ade4-b20083d8901a в параметр paramGUIDnewProtocol с типом UUID. Значение будет доступно в переменной с именем paramGUIDnewProtocol
+Выполнение операции Create_Protocol перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 640 ms
+Начало выполнения действия ЖЦ guid_to_string_with_formatCall (Форматировать ГУИД  в STRING через formatCall)
+Выполняется проверка условий для экшена guid_to_string_with_formatCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: true
+ | | проверка условия paramGUIDnewProtocol (b9c45e4e-4267-443d-ade4-b20083d8901a) IS NULL, результат: false
+Проверка условий для экшена пройдена guid_to_string_with_formatCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр format для операции guid_to_string_with_formatCall. Требуемый класс STRING. Получено значение %s
+Запрашивается параметр null для операции guid_to_string_with_formatCall. Требуемый класс UUID.Значение по умолчанию null. Получено значение b9c45e4e-4267-443d-ade4-b20083d8901a
+Запрашивается параметр resultFieldName для операции guid_to_string_with_formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр resultParamName для операции guid_to_string_with_formatCall. Требуемый класс STRING.Значение по умолчанию null. Получено значение paramGUIDnewProtocol
+Операция guid_to_string_with_formatCall выставляет значение b9c45e4e-4267-443d-ade4-b20083d8901a в параметр paramGUIDnewProtocol с типом STRING. Значение будет доступно в переменной с именем paramGUIDnewProtocol
+Выполнение операции guid_to_string_with_formatCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ Find_new_negative_protocol (Поиск созданного отрицательного протокола документа)
+Выполняется проверка условий для экшена Find_new_negative_protocol, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: true
+ | |\ результат условия NOT: true
+ | | |\ результат группы AND: false
+ | | | | проверка условия docState.systemName (TO_CANCEL) = Executed, результат: false
+ | |\ результат группы OR: true
+ | | |\ результат условия NOT: false
+ | | | | проверка условия sdo.DOC.MA_GUID_MSC_PROTOKOL (null) IS NULL, результат: true
+ | | |\ результат условия NOT: true
+ | | | | проверка условия paramGUIDnewProtocol (b9c45e4e-4267-443d-ade4-b20083d8901a) IS NULL, результат: false
+Проверка условий для экшена пройдена Find_new_negative_protocol для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр DOC_SYS_NAME для операции Find_new_negative_protocol. Требуемый класс STRING. Получено значение MSC_Protocol
+Запрашивается параметр FILTER_QUERY для операции Find_new_negative_protocol. Требуемый класс STRING. Получено значение (globalDocId = #{paramGUIDnewProtocol} or globalDocId = #{sdo.DOC.MA_GUID_MSC_PROTOKOL} or globalDocId = #{sbo.DOC.MFK_GUID_PROTOKOL}) and fields.DOC.DI_PROTTYPE = '1' 
+Запрашивается параметр RESULT_PARAM_NAME для операции Find_new_negative_protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение vPrInfo
+Запрашивается параметр FIELDS для операции Find_new_negative_protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение DOC.INF_CREATIONDATE;DOC.PI_NUMPROT
+Запрашивается параметр FIELD_TYPES для операции Find_new_negative_protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр MULTIPLE для операции Find_new_negative_protocol. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр SELECT_ONLY_FIRST для операции Find_new_negative_protocol. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр FILTER_MAPPING для операции Find_new_negative_protocol. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Операция Find_new_negative_protocol выставляет значение 2020-07-28 в параметр vPrInfo.DOC.INF_CREATIONDATE с типом DATE. Значение будет доступно в переменной с именем vPrInfo.DOC.INF_CREATIONDATE
+Операция Find_new_negative_protocol выставляет значение 6810 в параметр vPrInfo.DOC.PI_NUMPROT с типом STRING. Значение будет доступно в переменной с именем vPrInfo.DOC.PI_NUMPROT
+Выполнение операции Find_new_negative_protocol перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 14 ms
+Начало выполнения действия ЖЦ set_protocol_info (Выполняет выставление информации о протоколе)
+Выполняется проверка условий для экшена set_protocol_info, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: true
+ | | проверка условия vPrInfo.DOC.INF_CREATIONDATE (2020-07-28) IS NULL, результат: false
+Проверка условий для экшена пройдена set_protocol_info для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр fieldValue для операции set_protocol_info. Требуемый класс -.Значение по умолчанию null. Получено значение null
+Запрашивается параметр fieldName для операции set_protocol_info. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр DOC.SI_PROTOCOLGUID для операции set_protocol_info. Требуемый класс STRING.Значение по умолчанию null. Получено значение b9c45e4e-4267-443d-ade4-b20083d8901a
+Запрашивается параметр DOC.SI_PROTOCOLDATE для операции set_protocol_info. Требуемый класс DATE.Значение по умолчанию null. Получено значение 2020-07-28
+Запрашивается параметр DOC.SI_PROTOCOLNUM для операции set_protocol_info. Требуемый класс STRING.Значение по умолчанию null. Получено значение 6810
+Выполнение операции set_protocol_info перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ setFieldValueCall (Выполняет выставление значение #{sdo.DOC.MA_GUID_MSC_PROTOKOL} в поле документа ГУИД протокола [DOC.SI_PROTOCOLGUID].)
+Выполняется проверка условий для экшена setFieldValueCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия sdo.DOC.MA_GUID_MSC_PROTOKOL (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена setFieldValueCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ setFieldValueCall (Выполняет выставление значение #{sbo.DOC.MFK_GUID_PROTOKOL} в поле документа ГУИД протокола [DOC.SI_PROTOCOLGUID].)
+Выполняется проверка условий для экшена setFieldValueCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат условия NOT: false
+ | | проверка условия sbo.DOC.MFK_GUID_PROTOKOL (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена setFieldValueCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ tofk_deleteSignByScheme (Удаление всех ЭП по схемам ТОФК)
+Выполняется проверка условий для экшена tofk_deleteSignByScheme, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы OR: true
+ | |\ результат группы AND: false
+ | | | проверка условия countPOUnexec (null) = 0, результат: false
+ | |\ результат условия NOT: true
+ | | | проверка условия vProtocolSource (PUR) = MSC_PAYM_ORDER_PBS, результат: false
+Проверка условий для экшена пройдена tofk_deleteSignByScheme для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Запрашивается параметр scheme для операции tofk_deleteSignByScheme. Требуемый класс STRING.Значение по умолчанию null. Получено значение custom_CheckedFK_v1.ss,custom_APPROVED_OI_FK_v1.ss,custom_HEAD_APPROVEMENT_FK_v1.ss
+Выполнение операции tofk_deleteSignByScheme перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 1 ms
+Начало выполнения действия ЖЦ executeTransitionCall (Вызов перехода ДЖЦ для удаления связанного АвтоСБО)
+Выполняется проверка условий для экшена executeTransitionCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия guidSBO (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена executeTransitionCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ ClearDocFieldsCall (Удаляем гуид АвтоСБО, если переход вызван из СБО)
+Выполняется проверка условий для экшена ClearDocFieldsCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия sbo.DOC.MFK_GUID_PROTOKOL (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена ClearDocFieldsCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ executeTransitionCall (Вызов перехода ДЖЦ для удаления связанного БО)
+Выполняется проверка условий для экшена executeTransitionCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия sbo.DOC.MFK_GUIDEXP_BO (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена executeTransitionCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ executeTransitionCall (Вызов перехода ДЖЦ для удаления связанного ДО)
+Выполняется проверка условий для экшена executeTransitionCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия DOGuid (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена executeTransitionCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ executeTransitionCall (Вызов перехода ДЖЦ для удаления связанного АвтоСДО)
+Выполняется проверка условий для экшена executeTransitionCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия guidSDO (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена executeTransitionCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ epguClearField (Очистка поля Идентификатор АвтоСДО)
+Выполняется проверка условий для экшена epguClearField, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | |\ результат условия NOT: false
+ | | | проверка условия DOC.SI_GUID_AUTODO (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена epguClearField для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+Начало выполнения действия ЖЦ saveCall (Выполняет сохранение документа)
+Выполнение операции saveCall перехода toCancel для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f успешно завершено за 131 ms
+Выполнение пост-обработчиков ДЖЦ LifeCycleCallRef{call-id=rollbackIfNotOkPostCall},LifeCycleCallRef{call-id=executeNextTransitionCall}
+Начало выполнения действия ЖЦ rollbackIfNotOkPostCall (Откат транзакции при условии возникновения ошибок в переходе)
+Начало выполнения действия ЖЦ executeNextTransitionCall (Отмена из ПП: Если все ПП обработаны и есть Исполненные ПП, то вызов перехода createLineProtocol)
+Выполняется проверка условий для экшена executeNextTransitionCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
+ |\ результат группы AND: false
+ | | проверка условия countPOexec (null) > 0, результат: false
+Проверка условий для экшена не пройдена executeNextTransitionCall для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
