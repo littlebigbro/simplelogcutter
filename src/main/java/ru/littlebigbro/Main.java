@@ -23,6 +23,7 @@ public class Main extends Application {
         Parent panel = FXMLLoader.load(getClass().getResource("ru.littlebigbro.fxml"));
         Scene scene = new Scene(panel, 475, 340);
         primaryStage.setTitle("LoggerCutter");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

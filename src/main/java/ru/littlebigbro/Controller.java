@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -65,7 +66,14 @@ public class Controller {
 
     @FXML
     void chooseSaveDirectoryAction(ActionEvent event) {
-
+        Node source = (Node) event.getSource();
+        Stage PrimaryStage = (Stage) source.getScene().getWindow();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Выбор папки сохранения");
+        File directoryObject = directoryChooser.showDialog(PrimaryStage);
+        if (directoryObject != null) {
+            saveDirectoryPath.setText(directoryObject.getPath());
+        }
     }
 
     @FXML
@@ -77,7 +85,8 @@ public class Controller {
 
         if(!filePath.getText().isEmpty() && !userString.isEmpty()) {
             File log = new File(filePath.getText());
-            fileHandler = new Handler(log, userString, payLogStdPattern, payLogSearchPattern);
+            File saveLog = new File(saveDirectoryPath.getText());
+            fileHandler = new Handler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
             fileHandler.startAlgorithm();
             fileHandler = null;
         }

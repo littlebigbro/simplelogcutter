@@ -7,16 +7,24 @@ import java.util.List;
 public class Handler {
 
     private final File LOG;
+    private final File NEW_LOG;
     private final String SEARCHED_STRING;
     private final String STANDARD_PATTERN;
     private final String SEARCH_PATTERN;
     private List<String> logInList;
 
-    public Handler(File log, String searchString, String stdPattern, String searchPattern){
+    public Handler(File log, File saveLog, String searchString, String stdPattern, String searchPattern){
         this.LOG = log;
         this.SEARCHED_STRING = searchString;
         this.STANDARD_PATTERN = stdPattern;
         this.SEARCH_PATTERN = searchPattern;
+        if (saveLog.getPath().isEmpty()) {
+            String absolutePath = log.getAbsolutePath();
+            String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
+            NEW_LOG = new File(filePath);
+        } else {
+            this.NEW_LOG = saveLog;
+        }
     }
 
     public void startAlgorithm() {
@@ -87,7 +95,7 @@ public class Handler {
     }
 
     private void writeToNewFile(List<String> oldLog, int begin, int end) {
-        String newFilePath = "H:/Java/SimpleLogCutter/src/main/resources/test_output/" + SEARCHED_STRING + ".txt";
+        String newFilePath = NEW_LOG.getPath() + File.separator + SEARCHED_STRING + ".txt";
         try {
             FileWriter logWriter = new FileWriter(newFilePath);
             BufferedWriter writer = new BufferedWriter(logWriter);

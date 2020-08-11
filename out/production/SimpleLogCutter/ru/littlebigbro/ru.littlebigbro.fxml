@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="340.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.littlebigbro.Controller">
+   <children>
+      <TextField fx:id="filePath" layoutX="35.0" layoutY="90.0" prefHeight="25.0" prefWidth="280.0" />
+      <Separator layoutY="318.0" prefHeight="7.0" prefWidth="475.0" />
+      <TextField fx:id="saveDirectoryPath" layoutX="35.0" layoutY="164.0" prefHeight="25.0" prefWidth="280.0" />
+      <TextField fx:id="GUID" layoutX="35.0" layoutY="280.0" onAction="#userStringFillAction" prefHeight="25.0" prefWidth="280.0" promptText="GUID" />
+      <ComboBox fx:id="patternBox" disable="true" layoutX="35.0" layoutY="245.0" onAction="#changePattenAction" prefHeight="25.0" prefWidth="280.0" />
+      <Button fx:id="handlerButton" layoutX="320.0" layoutY="245.0" mnemonicParsing="false" onAction="#handlerActivation" prefHeight="60.0" prefWidth="115.0" text="Обработать" />
+      <Button fx:id="chooseFilePathButton" layoutX="320.0" layoutY="90.0" mnemonicParsing="false" onAction="#chooseFilePathAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать файл..." />
+      <Label layoutX="20.0" layoutY="60.0" text="Выбрать файл для обработки" />
+      <Label layoutX="20.0" layoutY="139.0" text="Выбрать папку для сохранения результата" />
+      <Button fx:id="chooseSavePathButton" layoutX="320.0" layoutY="164.0" mnemonicParsing="false" onAction="#chooseSaveDirectoryAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать папку..." />
+      <Separator layoutY="197.0" prefHeight="7.0" prefWidth="475.0" />
+      <Label layoutX="20.0" layoutY="220.0" text="Выбрать шаблон обработки" />
+      <Label layoutX="189.0" layoutY="321.0" text="alpha build v.0.1.0" textFill="#a1a1a1" />
+   </children>
+</AnchorPane>
