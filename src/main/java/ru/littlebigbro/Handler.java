@@ -17,10 +17,9 @@ public class Handler {
         this.SEARCHED_STRING = searchString;
         this.STANDARD_PATTERN = stdPattern;
         this.SEARCH_PATTERN = searchPattern;
-        startAlgorithm();
     }
 
-    private void startAlgorithm() {
+    public void startAlgorithm() {
         if (SEARCHED_STRING.isEmpty()) {
             System.out.println("Поисковой запрос пуст");
         } else {
@@ -96,6 +95,7 @@ public class Handler {
                 writer.write(oldLog.get(i) + "\n");
             }
             writer.close();
+            logWriter.close();
             System.out.println("Done");
         }
         catch (Exception ex){
