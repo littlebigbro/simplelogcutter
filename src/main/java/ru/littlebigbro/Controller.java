@@ -2,6 +2,8 @@ package ru.littlebigbro;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +16,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Controller {
+    private final String PAYLOG_PATTERN = "Шаблон для pay.log с поиском по GUID";
+    private final String REGEX_PATTERN = "Регулярное выражение";
     private String userString;
     private String payLogStdPattern;
     private String payLogSearchPattern;
@@ -34,7 +38,7 @@ public class Controller {
     private TextField GUID;
 
     @FXML
-    private ComboBox<?> patternBox;
+    private ComboBox<String> patternBox;
 
     @FXML
     private Button handlerButton;
@@ -47,8 +51,15 @@ public class Controller {
 
     @FXML
     void changePattenAction(ActionEvent event) {
-        payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
-        payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
+        if (patternBox.getValue().equals(PAYLOG_PATTERN)) {
+            payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
+            payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
+        }
+        if (patternBox.getValue().equals(REGEX_PATTERN)) {
+            //payLogStdPattern вообще не надо заполнять
+            payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
+            payLogSearchPattern = GUID.getText();
+        }
     }
 
     @FXML
@@ -56,6 +67,10 @@ public class Controller {
         Node source = (Node) event.getSource();
         Stage PrimaryStage = (Stage) source.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
+        if (!filePath.getText().isEmpty()) {
+            String fileDirectoryPath = filePath.getText().substring(0,filePath.getText().lastIndexOf(File.separator));
+            fileChooser.setInitialDirectory(new File(fileDirectoryPath));
+        }
         fileChooser.getExtensionFilters().addAll();
         fileChooser.setTitle("Выбор файла");
         File fileObject = fileChooser.showOpenDialog(PrimaryStage);
@@ -69,6 +84,9 @@ public class Controller {
         Node source = (Node) event.getSource();
         Stage PrimaryStage = (Stage) source.getScene().getWindow();
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        if (!saveDirectoryPath.getText().isEmpty()) {
+            directoryChooser.setInitialDirectory(new File(saveDirectoryPath.getText()));
+        }
         directoryChooser.setTitle("Выбор папки сохранения");
         File directoryObject = directoryChooser.showDialog(PrimaryStage);
         if (directoryObject != null) {
@@ -78,17 +96,17 @@ public class Controller {
 
     @FXML
     void handlerActivation(ActionEvent event) {
-        Handler fileHandler;
         userString = GUID.getText();
-        payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
-        payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
-
         if(!filePath.getText().isEmpty() && !userString.isEmpty()) {
-            File log = new File(filePath.getText());
-            File saveLog = new File(saveDirectoryPath.getText());
-            fileHandler = new Handler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
-            fileHandler.startAlgorithm();
-            fileHandler = null;
+            if (patternBox.getValue().equals(PAYLOG_PATTERN)) {
+                payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
+                payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
+                File log = new File(filePath.getText());
+                File saveLog = new File(saveDirectoryPath.getText());
+                Pattern pattern = new Pattern();
+                pattern.setHandler(new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern));
+                pattern.executeHandler();
+            }
         }
     }
 
@@ -98,5 +116,10 @@ public class Controller {
 
     @FXML
     void initialize() {
+        List<String> patternsList = new ArrayList<>();
+        patternsList.add(PAYLOG_PATTERN);
+        patternsList.add(REGEX_PATTERN);
+        patternBox.getItems().addAll(patternsList);
+        patternBox.setValue(PAYLOG_PATTERN);
     }
 }
