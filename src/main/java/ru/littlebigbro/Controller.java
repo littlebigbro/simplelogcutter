@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -18,9 +19,6 @@ import javafx.stage.Stage;
 public class Controller {
     private final String PAYLOG_PATTERN = "Шаблон для pay.log с поиском по GUID";
     private final String REGEX_PATTERN = "Регулярное выражение";
-    private String userString;
-    private String payLogStdPattern;
-    private String payLogSearchPattern;
 
     @FXML
     private ResourceBundle resources;
@@ -51,15 +49,6 @@ public class Controller {
 
     @FXML
     void changePattenAction(ActionEvent event) {
-        if (patternBox.getValue().equals(PAYLOG_PATTERN)) {
-            payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
-            payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
-        }
-        if (patternBox.getValue().equals(REGEX_PATTERN)) {
-            //payLogStdPattern вообще не надо заполнять
-            payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
-            payLogSearchPattern = GUID.getText();
-        }
     }
 
     @FXML
@@ -68,7 +57,7 @@ public class Controller {
         Stage PrimaryStage = (Stage) source.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         if (!filePath.getText().isEmpty()) {
-            String fileDirectoryPath = filePath.getText().substring(0,filePath.getText().lastIndexOf(File.separator));
+            String fileDirectoryPath = filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator));
             fileChooser.setInitialDirectory(new File(fileDirectoryPath));
         }
         fileChooser.getExtensionFilters().addAll();
@@ -96,16 +85,58 @@ public class Controller {
 
     @FXML
     void handlerActivation(ActionEvent event) {
-        userString = GUID.getText();
-        if(!filePath.getText().isEmpty() && !userString.isEmpty()) {
-            if (patternBox.getValue().equals(PAYLOG_PATTERN)) {
-                payLogStdPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + ".*$";
-                payLogSearchPattern = "^.*" + "Лог перехода" + ".*" + "для документа " + userString + ".*$";
-                File log = new File(filePath.getText());
-                File saveLog = new File(saveDirectoryPath.getText());
-                Pattern pattern = new Pattern();
-                pattern.setHandler(new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern));
-                pattern.executeHandler();
+        String payLogStdPattern;
+        String payLogSearchPattern;
+        String userString = GUID.getText();
+        if(!filePath.getText().isEmpty() ) {
+            Handler handler;
+            switch (patternBox.getValue()) {
+                case PAYLOG_PATTERN : {
+                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
+                    payLogSearchPattern = "(.*)Лог перехода(.*)для документа " + userString + "(.*)";
+                    File log = new File(filePath.getText());
+                    File saveLog = new File(saveDirectoryPath.getText());
+                    Pattern pattern = new Pattern();
+                    handler = new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
+                    pattern.setHandler(handler);
+                    pattern.executeHandler();
+                    break;
+                }
+
+                case REGEX_PATTERN : {
+                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
+                    payLogSearchPattern = userString;
+                    File log = new File(filePath.getText());
+                    File saveLog = new File(saveDirectoryPath.getText());
+                    Pattern pattern = new Pattern();
+                    handler = new RegExHandler(log, saveLog, payLogStdPattern, payLogSearchPattern);
+                    pattern.setHandler(handler);
+                    pattern.executeHandler();
+                    break;
+                }
+
+                default : {
+                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
+                    payLogSearchPattern = "(.*)Лог перехода(.*)для документа " + userString + "(.*)";
+                    File log = new File(filePath.getText());
+                    File saveLog = new File(saveDirectoryPath.getText());
+                    Pattern pattern = new Pattern();
+                    handler = new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
+                    pattern.setHandler(handler);
+                    pattern.executeHandler();
+                }
+            }
+            if(!handler.getErrorMessage().equals("FALSE") || !handler.getDone().equals("FALSE")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                if (handler.getDone().equals("Готово!")){
+                    alert.setTitle("Готово!");
+                    alert.setContentText(handler.getDone());
+                } else {
+                    alert.setTitle("ERROR");
+                    alert.setContentText(handler.getErrorMessage());
+                }
+                alert.setHeaderText(null);
+                alert.showAndWait();
             }
         }
     }

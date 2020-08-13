@@ -7,4 +7,6 @@ public interface Handler {
     List<String> readFileAndRewriteInList();
     List<Integer> searchByPattern(String pattern);
     void writeToNewFile(List<String> oldLog, int begin, int end);
+    String getErrorMessage();
+    String getDone();
 }

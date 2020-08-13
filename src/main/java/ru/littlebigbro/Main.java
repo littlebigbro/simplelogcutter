@@ -14,6 +14,10 @@ public class Main extends Application {
 //        String userString = "d06da315-0565-472c-88e6-068619e4cfe8";
 /*
     1) Бага. Жрёт память при каждом нажатии на кнопку "Обработать".
+    2) Необходимо поправить RegExHandler в чтении/записи из файла(как в PayLogHandler)
+    3) Проверить методы поиска начала/конца перехода в PayLogHandler, и сделать как в RegExHandler если возможно
+    4) тесты?
+    5) Почистить репозиторий от лишний файлов
 * */
         launch(args);
     }
@@ -22,7 +26,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent panel = FXMLLoader.load(getClass().getResource("ru.littlebigbro.fxml"));
         Scene scene = new Scene(panel, 475, 340);
-        primaryStage.setTitle("LoggerCutter");
+        primaryStage.setTitle("Log Handler");
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
