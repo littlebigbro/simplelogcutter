@@ -1,23 +1,26 @@
 package ru.littlebigbro;
 
+import com.sun.jmx.remote.internal.ArrayQueue;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegExHandler implements Handler {
     private final File LOG;
     private final File NEW_LOG;
-    private final String STANDARD_PATTERN;
+    private final String STANDARD_PATTERN = "(.*)Лог перехода(.*)для документа(.*)";
     private final String SEARCH_PATTERN;
-    private String newFilePath;
     private List<String> logInList;
     private String errorMessage = "FALSE";
-    private String done = "FALSE";
+    private boolean done = false;
 
-    public RegExHandler(File log, File saveLog, String stdPattern, String searchPattern){
+    public RegExHandler(File log, File saveLog, String searchString){
         this.LOG = log;
-        this.STANDARD_PATTERN = stdPattern;
-        this.SEARCH_PATTERN = searchPattern;
+        this.SEARCH_PATTERN = searchString;
         if (saveLog.getPath().isEmpty()) {
             String absolutePath = log.getAbsolutePath();
             String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
@@ -29,26 +32,27 @@ public class RegExHandler implements Handler {
 
     @Override
     public void startAlgorithm() {
-        if (STANDARD_PATTERN.isEmpty()) {
-            System.out.println("Поисковой запрос пуст");
+        if (SEARCH_PATTERN.isEmpty()) {
+            errorMessage = "Поисковой запрос пуст";
         } else {
             logInList = readFileAndRewriteInList();
             if (logInList.isEmpty()) {
-                System.out.println("Файл пуст");
+                errorMessage = "Файл пуст";
             } else {
                 List<Integer> transitionBegin = searchByPattern(STANDARD_PATTERN); //находим начало переходов
                 List<Integer> searchHits = searchByPattern(SEARCH_PATTERN); //находим строки соответствующие шаблону
                 if (transitionBegin.isEmpty()) {
-                    System.out.println("По регулярному выражению \"" + STANDARD_PATTERN + "\" ничего не найдено.");
+                    errorMessage = "По регулярному выражению \"" + STANDARD_PATTERN + "\" ничего не найдено.";
                 } else {
                     List<Integer> transitionEnd = transitionEndCalculation(transitionBegin); //находим концы переходов
-                    newFilePath = NEW_LOG.getPath() + File.separator + "regEx.txt";
+                    String defaultName = "REGEX.txt";
+                    String newFileName = newFileNameGenerator(defaultName);
                     for (int i = 0; i < transitionBegin.size(); i++) {
                         if(checkInTransition(searchHits, transitionBegin.get(i), transitionEnd.get(i))){
-                            writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i));
+                            writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i), newFileName);
                         }
                     }
-                    done = "Готово!";
+                    done = true;
                 }
             }
         }
@@ -58,15 +62,16 @@ public class RegExHandler implements Handler {
     public List<String> readFileAndRewriteInList() {
         List<String> readFile = new ArrayList<>();
         try {
-            FileReader logReader = new FileReader(LOG);
-            BufferedReader reader = new BufferedReader(logReader);
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(LOG), StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
                 readFile.add(line);
             }
             reader.close();
         } catch (Exception ex) {
-            System.out.println("Ошибка в логе: " + LOG.getName());
+            errorMessage = "Ошибка в логе: " + LOG.getName();
             ex.printStackTrace();
         }
         return readFile;
@@ -76,15 +81,11 @@ public class RegExHandler implements Handler {
     public List<Integer> searchByPattern(String pattern) {
         List<Integer> hitRows = new ArrayList<>();
         String line;
-        System.out.println(pattern);
         for (int i = 0; i < logInList.size(); i++) {
             line = logInList.get(i);
             if (line.matches(pattern)) {
                 hitRows.add(i);
             }
-        }
-        for (Integer row: hitRows) {
-            System.out.println(row.toString());
         }
         return hitRows;
     }
@@ -102,31 +103,30 @@ public class RegExHandler implements Handler {
     }
 
     @Override
-    public void writeToNewFile(List<String> oldLog, int begin, int end) {
-        FileWriter logWriter;
-        BufferedWriter writer;
+    public void writeToNewFile(List<String> oldLog, int begin, int end, String newFileName) {
+        String newFilePath = NEW_LOG.getPath() + File.separator + newFileName;
         try {
-            logWriter = new FileWriter(newFilePath,true);
-            writer = new BufferedWriter(logWriter);
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter (
+                            new FileOutputStream(newFilePath, true), StandardCharsets.UTF_8));
             for (int i = begin; i <= end ; i++){
                 writer.write(oldLog.get(i) + "\n");
             }
             writer.close();
-            logWriter.close();
         }
         catch (Exception ex){
-            System.out.println("Ошибка записи в файл regEx.txt");
+            errorMessage = "Ошибка записи в файл " + newFileName;
             ex.printStackTrace();
         }
     }
 
     @Override
     public String getErrorMessage() {
-        return null;
+        return errorMessage;
     }
 
     @Override
-    public String getDone() {
+    public boolean getDone() {
         return done;
     }
 
@@ -137,5 +137,41 @@ public class RegExHandler implements Handler {
             }
         }
         return false;
+    }
+
+    public String newFileNameGenerator(String defaultName) {
+        File[] fileList = NEW_LOG.listFiles();
+        if (fileList != null && fileList.length != 0) {
+            List <String> fileNames = new ArrayList<>();
+            for (File file : fileList) {
+                fileNames.add(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(File.separator)+ 1 ));
+            }
+            boolean inList = false;
+            for (String fileName : fileNames) {
+                if (fileName.equals(defaultName)) {
+                    inList = true;
+                    break;
+                }
+            }
+            if (!inList) {
+                return defaultName;
+            }
+            String dot = ".";
+            String name = defaultName.substring(0, defaultName.indexOf(dot));// отсечь потенциальный (i)
+            String format = defaultName.substring(defaultName.indexOf(dot));
+            Pattern nextCreationPattern = Pattern.compile("(" + name + "[(])(\\d)([)]" + format +")");
+            Matcher matcher;
+            int numberOfFile = 1;
+            for (String fileName : fileNames) {
+                matcher = nextCreationPattern.matcher(fileName);
+                if (matcher.find()) {
+                    numberOfFile = Integer.parseInt(matcher.group(2));
+                    numberOfFile++;
+                }
+            }
+            return name + "(" + numberOfFile + ")" + format;
+        } else {
+            return defaultName;
+        }
     }
 }

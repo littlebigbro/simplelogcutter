@@ -1,6 +1,7 @@
 package ru.littlebigbro;
 
-public class Pattern {
+public class ProcessingTemplate {
+
     Handler handler;
 
     public void setHandler(Handler handler) {

@@ -8,10 +8,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,6 +16,9 @@ import javafx.stage.Stage;
 public class Controller {
     private final String PAYLOG_PATTERN = "Шаблон для pay.log с поиском по GUID";
     private final String REGEX_PATTERN = "Регулярное выражение";
+    private final String ERROR = "Ошибка";
+    private final String DONE = "Готово!";
+
 
     @FXML
     private ResourceBundle resources;
@@ -30,25 +30,53 @@ public class Controller {
     private TextField filePath;
 
     @FXML
-    private TextField saveDirectoryPath;
-
-    @FXML
-    private TextField GUID;
-
-    @FXML
-    private ComboBox<String> patternBox;
-
-    @FXML
-    private Button handlerButton;
+    private Tooltip chooseFileTooltip;
 
     @FXML
     private Button chooseFilePathButton;
 
     @FXML
+    private Tooltip chooseFileButtonTooltip;
+
+    @FXML
+    private TextField saveDirectoryPath;
+
+    @FXML
+    private Tooltip chooseFolderTooltip;
+
+    @FXML
     private Button chooseSavePathButton;
 
     @FXML
+    private Tooltip saveFolderButtonTooltip;
+
+    @FXML
+    private ComboBox<String> patternBox;
+
+    @FXML
+    private TextField searchString;
+
+    @FXML
+    private Button handlerButton;
+
+    @FXML
+    private Tooltip ripTheDevilTooltip;
+
+    @FXML
     void changePattenAction(ActionEvent event) {
+        switch (patternBox.getValue()) {
+            case PAYLOG_PATTERN : {
+                searchString.setPromptText("Укажите GUID");
+                searchString.setTooltip(new Tooltip("Укажите GUID"));
+                break;
+            }
+
+            case REGEX_PATTERN : {
+                searchString.setPromptText("Укажите регулярное выражение");
+                searchString.setTooltip(new Tooltip("Укажите регулярное выражение"));
+                break;
+            }
+        }
     }
 
     @FXML
@@ -66,6 +94,7 @@ public class Controller {
         if (fileObject != null) {
             filePath.setText(fileObject.getPath());
         }
+        chooseFileTooltip.setText(filePath.getText());
     }
 
     @FXML
@@ -81,63 +110,56 @@ public class Controller {
         if (directoryObject != null) {
             saveDirectoryPath.setText(directoryObject.getPath());
         }
+        chooseFolderTooltip.setText(saveDirectoryPath.getText());
     }
 
     @FXML
-    void handlerActivation(ActionEvent event) {
-        String payLogStdPattern;
-        String payLogSearchPattern;
-        String userString = GUID.getText();
-        if(!filePath.getText().isEmpty() ) {
+    void ripTheDevilOutOfIt(ActionEvent event) {
+        String userString = searchString.getText().trim();
+        String alertMessage;
+        if (saveDirectoryPath.getText().isEmpty()) {
+            saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
+        }
+        if(!filePath.getText().isEmpty()) {
             Handler handler;
+            File log = new File(filePath.getText());
+            File saveLog = new File(saveDirectoryPath.getText());
+            ProcessingTemplate processingTemplate = new ProcessingTemplate();
             switch (patternBox.getValue()) {
                 case PAYLOG_PATTERN : {
-                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
-                    payLogSearchPattern = "(.*)Лог перехода(.*)для документа " + userString + "(.*)";
-                    File log = new File(filePath.getText());
-                    File saveLog = new File(saveDirectoryPath.getText());
-                    Pattern pattern = new Pattern();
-                    handler = new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
-                    pattern.setHandler(handler);
-                    pattern.executeHandler();
+                    handler = new PayLogHandler(log, saveLog, userString);
+                    processingTemplate.setHandler(handler);
+                    processingTemplate.executeHandler();
                     break;
                 }
 
                 case REGEX_PATTERN : {
-                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
-                    payLogSearchPattern = userString;
-                    File log = new File(filePath.getText());
-                    File saveLog = new File(saveDirectoryPath.getText());
-                    Pattern pattern = new Pattern();
-                    handler = new RegExHandler(log, saveLog, payLogStdPattern, payLogSearchPattern);
-                    pattern.setHandler(handler);
-                    pattern.executeHandler();
+                    handler = new RegExHandler(log, saveLog, userString);
+                    processingTemplate.setHandler(handler);
+                    processingTemplate.executeHandler();
                     break;
                 }
 
                 default : {
-                    payLogStdPattern = "(.*)Лог перехода(.*)для документа(.*)";
-                    payLogSearchPattern = "(.*)Лог перехода(.*)для документа " + userString + "(.*)";
-                    File log = new File(filePath.getText());
-                    File saveLog = new File(saveDirectoryPath.getText());
-                    Pattern pattern = new Pattern();
-                    handler = new PayLogHandler(log, saveLog, userString, payLogStdPattern, payLogSearchPattern);
-                    pattern.setHandler(handler);
-                    pattern.executeHandler();
+                    handler = new PayLogHandler(log, saveLog, userString);
+                    processingTemplate.setHandler(handler);
+                    processingTemplate.executeHandler();
                 }
             }
-            if(!handler.getErrorMessage().equals("FALSE") || !handler.getDone().equals("FALSE")) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                if (handler.getDone().equals("Готово!")){
-                    alert.setTitle("Готово!");
-                    alert.setContentText(handler.getDone());
+            if(!handler.getErrorMessage().equals("FALSE") || handler.getDone()) {
+                String alertType = ERROR;
+                if (handler.getDone()){
+                    alertType = DONE;
+                    alertMessage = "Обработка завершена. Файл сохранён по пути: " + saveDirectoryPath.getText();
                 } else {
-                    alert.setTitle("ERROR");
-                    alert.setContentText(handler.getErrorMessage());
+                    alertMessage = handler.getErrorMessage();
                 }
-                alert.setHeaderText(null);
-                alert.showAndWait();
+                alertGenerator(alertType, alertMessage);
+
             }
+        } else {
+            alertMessage = "Не указан путь к обрабатываемому файлу";
+            alertGenerator(ERROR, alertMessage);
         }
     }
 
@@ -152,5 +174,23 @@ public class Controller {
         patternsList.add(REGEX_PATTERN);
         patternBox.getItems().addAll(patternsList);
         patternBox.setValue(PAYLOG_PATTERN);
+        searchString.setPromptText("Укажите GUID");
+        searchString.setTooltip(new Tooltip("Укажите GUID"));
+
+        chooseFileTooltip.setText("Путь к файлу...");
+        filePath.setTooltip(chooseFileTooltip);
+        chooseFolderTooltip.setText("Путь к папке...");
+        saveDirectoryPath.setTooltip(chooseFolderTooltip);
+        chooseFilePathButton.setTooltip(new Tooltip("Выбрать файл"));
+        chooseSavePathButton.setTooltip(new Tooltip("Выбрать папку"));
+        handlerButton.setTooltip(new Tooltip("Rip the devil out of it!"));
+    }
+
+    void alertGenerator (String title, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(contentText);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }

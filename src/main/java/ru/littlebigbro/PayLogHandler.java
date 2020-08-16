@@ -4,30 +4,22 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PayLogHandler implements Handler {
 
     private final File LOG;
     private final File NEW_LOG;
     private final String SEARCHED_STRING;
-    private final String STANDARD_PATTERN;
-    private final String SEARCH_PATTERN;
     private List<String> logInList;
     private String errorMessage = "FALSE";
-    private String done = "FALSE";
+    private boolean done = false;
 
-    public PayLogHandler(File log, File saveLog, String searchString, String stdPattern, String searchPattern){
+    public PayLogHandler(File log, File newLog, String searchString){
         this.LOG = log;
-        this.SEARCHED_STRING = searchString;
-        this.STANDARD_PATTERN = stdPattern;
-        this.SEARCH_PATTERN = searchPattern;
-        if (saveLog.getPath().isEmpty()) {
-            String absolutePath = log.getAbsolutePath();
-            String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
-            NEW_LOG = new File(filePath);
-        } else {
-            this.NEW_LOG = saveLog;
-        }
+        this.SEARCHED_STRING = searchString.toLowerCase();
+        this.NEW_LOG = newLog;
     }
 
     @Override
@@ -39,17 +31,19 @@ public class PayLogHandler implements Handler {
             if (logInList.isEmpty()) {
                 errorMessage = "Файл пуст";
             } else {
-                System.out.println(logInList.get(1));
-                List<Integer> stdPatternHits = searchByPattern(STANDARD_PATTERN);
-                List<Integer> transitionBegin = searchByPattern(SEARCH_PATTERN); //находим начало переходов
+                String standardPattern = "(.*)Лог перехода(.*)для документа(.*)";
+                String searchPattern = "(.*)Лог перехода(.*)для документа " + SEARCHED_STRING + "(.*)";
+                List<Integer> stdPatternHits = searchByPattern(standardPattern.toLowerCase()); //находим начала всех переходов в логе
+                List<Integer> transitionBegin = searchByPattern(searchPattern.toLowerCase()); //находим начала переходов по гуиду
                 if (transitionBegin.isEmpty()) {
                     errorMessage = "По значению \"" + SEARCHED_STRING + "\" ничего не найдено.";
                 } else {
-                    List<Integer> transitionEnd = transitionEndCalculation(stdPatternHits, transitionBegin); //находим концы переходов
+                    List<Integer> transitionEnd = transitionEndCalculation(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
+                    String fileName = newFileNameGenerator(SEARCHED_STRING + ".txt");
                     for (int i = 0; i < transitionBegin.size(); i++) {
-                        writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i));
+                        writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i), fileName);
                     }
-                    done = "Готово!";
+                    done = true;
                 }
             }
         }
@@ -77,23 +71,12 @@ public class PayLogHandler implements Handler {
     @Override
     public List<Integer> searchByPattern(String pattern) {
         List<Integer> hitRows = new ArrayList<>();
-//        String line;
-//        for (int i = 0; i < logInList.size(); i++) {
-//            line = logInList.get(i);
-//            if (line.matches(pattern)) {
-//                hitRows.add(i);
-//            }
-//        }
         String line;
-        System.out.println(pattern);
         for (int i = 0; i < logInList.size(); i++) {
-            line = logInList.get(i);
+            line = logInList.get(i).toLowerCase();
             if (line.matches(pattern)) {
                 hitRows.add(i);
             }
-        }
-        for (Integer row: hitRows) {
-            System.out.println(row.toString());
         }
         return hitRows;
     }
@@ -115,19 +98,18 @@ public class PayLogHandler implements Handler {
     }
 
     @Override
-    public void writeToNewFile(List<String> oldLog, int begin, int end) {
-        String newFilePath = NEW_LOG.getPath() + File.separator + SEARCHED_STRING + ".txt";
+    public void writeToNewFile(List<String> oldLog, int begin, int end, String fileName) {
+        String newFilePath = NEW_LOG.getPath() + File.separator + fileName;
         try {
-            //FileWriter logWriter = new FileWriter(newFilePath);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(newFilePath), StandardCharsets.UTF_8));;
+                    new FileOutputStream(newFilePath, true), StandardCharsets.UTF_8));;
             for (int i = begin; i <= end ; i++){
                 writer.write(oldLog.get(i) + "\n");
             }
             writer.close();
         }
         catch (Exception ex){
-            errorMessage = "Ошибка записи в файл " + SEARCHED_STRING;
+            errorMessage = "Ошибка записи в файл " + fileName;
             ex.printStackTrace();
         }
     }
@@ -138,7 +120,43 @@ public class PayLogHandler implements Handler {
     }
 
     @Override
-    public String getDone() {
+    public boolean getDone() {
         return done;
+    }
+
+    public String newFileNameGenerator(String defaultName) {
+        File[] fileList = NEW_LOG.listFiles();
+        if (fileList != null && fileList.length != 0) {
+            List <String> fileNames = new ArrayList<>();
+            for (File file : fileList) {
+                fileNames.add(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(File.separator)+ 1 ));
+            }
+            boolean inList = false;
+            for (String fileName : fileNames) {
+                if (fileName.equals(defaultName)) {
+                    inList = true;
+                    break;
+                }
+            }
+            if (!inList) {
+                return defaultName;
+            }
+            String dot = ".";
+            String name = defaultName.substring(0, defaultName.indexOf(dot));// отсечь потенциальный (i)
+            String format = defaultName.substring(defaultName.indexOf(dot));
+            Pattern nextCreationPattern = Pattern.compile("(" + name + "[(])(\\d)([)]" + format +")");
+            Matcher matcher;
+            int numberOfFile = 1;
+            for (String fileName : fileNames) {
+                matcher = nextCreationPattern.matcher(fileName);
+                if (matcher.find()) {
+                    numberOfFile = Integer.parseInt(matcher.group(2));
+                    numberOfFile++;
+                }
+            }
+            return name + "(" + numberOfFile + ")" + format;
+        } else {
+            return defaultName;
+        }
     }
 }
