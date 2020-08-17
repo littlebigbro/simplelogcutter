@@ -20,7 +20,7 @@
             <Point3D />
          </rotationAxis></ImageView>
       <Label layoutX="20.0" layoutY="70.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать файл для обработки" />
-      <TextField fx:id="filePath" editable="true" layoutX="30.0" layoutY="95.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите файл для обработки" >
+      <TextField fx:id="filePath" editable="false" layoutX="30.0" layoutY="95.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите файл для обработки">
          <tooltip>
             <Tooltip fx:id="chooseFileTooltip" />
          </tooltip></TextField>
@@ -29,7 +29,7 @@
             <Tooltip fx:id="chooseFileButtonTooltip" />
          </tooltip></Button>
       <Label layoutX="20.0" layoutY="145.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать папку для сохранения результата" />
-      <TextField fx:id="saveDirectoryPath" editable="true" layoutX="30.0" layoutY="170.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите папку для сохранения">
+      <TextField fx:id="saveDirectoryPath" editable="false" layoutX="30.0" layoutY="170.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите папку для сохранения">
          <tooltip>
             <Tooltip fx:id="chooseFolderTooltip" />
          </tooltip></TextField>
@@ -39,7 +39,7 @@
          </tooltip></Button>
       <Label layoutX="20.0" layoutY="220.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать шаблон обработки" />
       <ComboBox fx:id="patternBox" layoutX="30.0" layoutY="245.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" onAction="#changePattenAction" prefHeight="25.0" prefWidth="300.0" />
-      <TextField fx:id="searchString" layoutX="30.0" layoutY="280.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" onAction="#userStringFillAction" prefHeight="25.0" prefWidth="300.0" />
+      <TextField fx:id="searchString" layoutX="30.0" layoutY="280.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" />
       <Button fx:id="handlerButton" layoutX="340.0" layoutY="245.0" maxHeight="60.0" maxWidth="115.0" minHeight="60.0" minWidth="115.0" mnemonicParsing="false" onAction="#ripTheDevilOutOfIt" prefHeight="60.0" prefWidth="115.0" text="Обработать">
          <tooltip>
             <Tooltip fx:id="ripTheDevilTooltip" />

@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
@@ -21,9 +20,10 @@ public class Main extends Application {
 +   5) записывать в новый файл если с таким именем уже существует.
 +   6)  зашить trim в строку поиска,
 +       строки с выбором пути закрыть на редактирование в подсказке выводить весь путь
-    7) добавить проверку на формат гуида для PayLogHandler, и для RegExHandler
++   7) добавить проверку на формат гуида для PayLogHandler, и для RegExHandler
     8) тесты?
     9) Почистить репозиторий от лишних файлов
+    10) красивости
 */
         launch(args);
     }

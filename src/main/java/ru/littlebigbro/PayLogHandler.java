@@ -18,33 +18,27 @@ public class PayLogHandler implements Handler {
 
     public PayLogHandler(File log, File newLog, String searchString){
         this.LOG = log;
-        this.SEARCHED_STRING = searchString.toLowerCase();
+        this.SEARCHED_STRING = searchString;
         this.NEW_LOG = newLog;
     }
 
     @Override
     public void startAlgorithm() {
-        if (SEARCHED_STRING.isEmpty()) {
-            errorMessage = "Поисковой запрос пуст";
+        logInList = readFileAndRewriteInList();
+        if (logInList.isEmpty()) {
+            errorMessage = "Обрабатываемый файл пуст";
         } else {
-            logInList = readFileAndRewriteInList();
-            if (logInList.isEmpty()) {
-                errorMessage = "Файл пуст";
+            String standardPattern = "(.*)Лог перехода(.*)для документа(.*)";
+            String searchPattern = "(.*)Лог перехода(.*)для документа " + SEARCHED_STRING + "(.*)";
+            List<Integer> stdPatternHits = searchByPattern(standardPattern.toLowerCase()); //находим начала всех переходов в логе
+            List<Integer> transitionBegin = searchByPattern(searchPattern.toLowerCase()); //находим начала переходов по гуиду
+            if (transitionBegin.isEmpty()) {
+                errorMessage = "По значению \"" + SEARCHED_STRING + "\" ничего не найдено.";
             } else {
-                String standardPattern = "(.*)Лог перехода(.*)для документа(.*)";
-                String searchPattern = "(.*)Лог перехода(.*)для документа " + SEARCHED_STRING + "(.*)";
-                List<Integer> stdPatternHits = searchByPattern(standardPattern.toLowerCase()); //находим начала всех переходов в логе
-                List<Integer> transitionBegin = searchByPattern(searchPattern.toLowerCase()); //находим начала переходов по гуиду
-                if (transitionBegin.isEmpty()) {
-                    errorMessage = "По значению \"" + SEARCHED_STRING + "\" ничего не найдено.";
-                } else {
-                    List<Integer> transitionEnd = transitionEndCalculation(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
-                    String fileName = newFileNameGenerator(SEARCHED_STRING + ".txt");
-                    for (int i = 0; i < transitionBegin.size(); i++) {
-                        writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i), fileName);
-                    }
-                    done = true;
-                }
+                List<Integer> transitionEnd = transitionEndCalculation(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
+                String fileName = newFileNameGenerator(SEARCHED_STRING + ".txt");
+                writeToNewFile(logInList, transitionBegin, transitionEnd, fileName);
+                done = true;
             }
         }
     }
@@ -97,20 +91,36 @@ public class PayLogHandler implements Handler {
         return transitionEnd;
     }
 
-    @Override
-    public void writeToNewFile(List<String> oldLog, int begin, int end, String fileName) {
+    public void writeToNewFile(List<String> oldLog, List<Integer> transitionBegin, List<Integer> transitionEnd, String fileName) {
         String newFilePath = NEW_LOG.getPath() + File.separator + fileName;
+        BufferedWriter writer = null;
+        FileOutputStream fileOutputStream = null;
+        OutputStreamWriter outputStreamWriter = null;
         try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(newFilePath, true), StandardCharsets.UTF_8));;
-            for (int i = begin; i <= end ; i++){
-                writer.write(oldLog.get(i) + "\n");
+            fileOutputStream = new FileOutputStream(newFilePath);
+            outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+            writer = new BufferedWriter(outputStreamWriter);
+            for (int i = 0; i < transitionBegin.size(); i++) {
+                for (int j = transitionBegin.get(i); j <= transitionEnd.get(i); j++){
+                    writer.write(oldLog.get(j) + "\n");
+                }
             }
-            writer.close();
         }
         catch (Exception ex){
             errorMessage = "Ошибка записи в файл " + fileName;
             ex.printStackTrace();
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                    outputStreamWriter.close();
+                    fileOutputStream.close();
+                }
+                catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
     }
 

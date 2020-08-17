@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.WeakHashMap;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,7 +22,7 @@ public class Controller {
     private final String REGEX_PATTERN = "Регулярное выражение";
     private final String ERROR = "Ошибка";
     private final String DONE = "Готово!";
-
+    private Handler handler = null;
 
     @FXML
     private ResourceBundle resources;
@@ -82,7 +86,7 @@ public class Controller {
     @FXML
     void chooseFilePathAction(ActionEvent event) {
         Node source = (Node) event.getSource();
-        Stage PrimaryStage = (Stage) source.getScene().getWindow();
+        Stage primaryStage = (Stage) source.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         if (!filePath.getText().isEmpty()) {
             String fileDirectoryPath = filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator));
@@ -90,7 +94,7 @@ public class Controller {
         }
         fileChooser.getExtensionFilters().addAll();
         fileChooser.setTitle("Выбор файла");
-        File fileObject = fileChooser.showOpenDialog(PrimaryStage);
+        File fileObject = fileChooser.showOpenDialog(primaryStage);
         if (fileObject != null) {
             filePath.setText(fileObject.getPath());
         }
@@ -100,13 +104,13 @@ public class Controller {
     @FXML
     void chooseSaveDirectoryAction(ActionEvent event) {
         Node source = (Node) event.getSource();
-        Stage PrimaryStage = (Stage) source.getScene().getWindow();
+        Stage primaryStage = (Stage) source.getScene().getWindow();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         if (!saveDirectoryPath.getText().isEmpty()) {
             directoryChooser.setInitialDirectory(new File(saveDirectoryPath.getText()));
         }
         directoryChooser.setTitle("Выбор папки сохранения");
-        File directoryObject = directoryChooser.showDialog(PrimaryStage);
+        File directoryObject = directoryChooser.showDialog(primaryStage);
         if (directoryObject != null) {
             saveDirectoryPath.setText(directoryObject.getPath());
         }
@@ -115,13 +119,45 @@ public class Controller {
 
     @FXML
     void ripTheDevilOutOfIt(ActionEvent event) {
-        String userString = searchString.getText().trim();
         String alertMessage;
-        if (saveDirectoryPath.getText().isEmpty()) {
-            saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
+        String userString = searchString.getText().trim();
+        boolean userStringIsCool = false;
+        if (!userString.isEmpty()){
+            switch (patternBox.getValue()) {
+                case PAYLOG_PATTERN : {
+                    if (userString.matches("[0-9a-zA-Z]{8}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{12}")) {
+                        userStringIsCool = true;
+                    } else {
+                        userStringIsCool = false;
+                        alertMessage = "Указанный GUID имеет неверный формат";
+                        alertGenerator(ERROR, alertMessage);
+                    }
+                    break;
+                }
+                case REGEX_PATTERN : {
+                    try {
+                        Pattern.compile(userString);
+                        userStringIsCool = true;
+                    }
+                    catch (PatternSyntaxException e) {
+                        userStringIsCool = false;
+                        alertMessage = "Указанное регулярное выражение имеет неверный формат";
+                        alertGenerator(ERROR, alertMessage);
+                    }
+                    break;
+                }
+            }
+        } else {
+            if (!filePath.getText().isEmpty()) {
+                alertMessage = "Поисковой запрос пуст";
+                alertGenerator(ERROR, alertMessage);
+            }
         }
-        if(!filePath.getText().isEmpty()) {
-            Handler handler;
+        if(!filePath.getText().isEmpty() && userStringIsCool) {
+            if (saveDirectoryPath.getText().isEmpty()) {
+                saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
+            }
+
             File log = new File(filePath.getText());
             File saveLog = new File(saveDirectoryPath.getText());
             ProcessingTemplate processingTemplate = new ProcessingTemplate();
@@ -155,16 +191,15 @@ public class Controller {
                     alertMessage = handler.getErrorMessage();
                 }
                 alertGenerator(alertType, alertMessage);
-
             }
+            handler = null;
         } else {
-            alertMessage = "Не указан путь к обрабатываемому файлу";
-            alertGenerator(ERROR, alertMessage);
+            if (filePath.getText().isEmpty()){
+                alertMessage = "Не указан путь к обрабатываемому файлу";
+                alertGenerator(ERROR, alertMessage);
+            }
         }
-    }
 
-    @FXML
-    void userStringFillAction(ActionEvent event) {
     }
 
     @FXML
@@ -178,12 +213,15 @@ public class Controller {
         searchString.setTooltip(new Tooltip("Укажите GUID"));
 
         chooseFileTooltip.setText("Путь к файлу...");
+
         filePath.setTooltip(chooseFileTooltip);
         chooseFolderTooltip.setText("Путь к папке...");
         saveDirectoryPath.setTooltip(chooseFolderTooltip);
+        //Устанавливаем подсказки
         chooseFilePathButton.setTooltip(new Tooltip("Выбрать файл"));
         chooseSavePathButton.setTooltip(new Tooltip("Выбрать папку"));
         handlerButton.setTooltip(new Tooltip("Rip the devil out of it!"));
+
     }
 
     void alertGenerator (String title, String contentText) {
@@ -192,5 +230,6 @@ public class Controller {
         alert.setContentText(contentText);
         alert.setHeaderText(null);
         alert.showAndWait();
+        alert.close();
     }
 }

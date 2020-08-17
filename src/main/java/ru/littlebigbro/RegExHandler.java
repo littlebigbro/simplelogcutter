@@ -1,7 +1,5 @@
 package ru.littlebigbro;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
@@ -32,47 +30,52 @@ public class RegExHandler implements Handler {
 
     @Override
     public void startAlgorithm() {
-        if (SEARCH_PATTERN.isEmpty()) {
-            errorMessage = "Поисковой запрос пуст";
+        logInList = readFileAndRewriteInList();
+        if (logInList.isEmpty()) {
+            errorMessage = "Обрабатываемый файл пуст";
         } else {
-            logInList = readFileAndRewriteInList();
-            if (logInList.isEmpty()) {
-                errorMessage = "Файл пуст";
+            List<Integer> transitionBegin = searchByPattern(STANDARD_PATTERN); //находим начало переходов
+            List<Integer> searchHits = searchByPattern(SEARCH_PATTERN); //находим строки соответствующие шаблону
+            if (searchHits.isEmpty()) {
+                errorMessage = "По регулярному выражению \"" + SEARCH_PATTERN + "\" ничего не найдено.";
             } else {
-                List<Integer> transitionBegin = searchByPattern(STANDARD_PATTERN); //находим начало переходов
-                List<Integer> searchHits = searchByPattern(SEARCH_PATTERN); //находим строки соответствующие шаблону
-                if (transitionBegin.isEmpty()) {
-                    errorMessage = "По регулярному выражению \"" + STANDARD_PATTERN + "\" ничего не найдено.";
-                } else {
-                    List<Integer> transitionEnd = transitionEndCalculation(transitionBegin); //находим концы переходов
-                    String defaultName = "REGEX.txt";
-                    String newFileName = newFileNameGenerator(defaultName);
-                    for (int i = 0; i < transitionBegin.size(); i++) {
-                        if(checkInTransition(searchHits, transitionBegin.get(i), transitionEnd.get(i))){
-                            writeToNewFile(logInList, transitionBegin.get(i), transitionEnd.get(i), newFileName);
-                        }
-                    }
-                    done = true;
-                }
+                List<Integer> transitionEnd = transitionEndCalculation(transitionBegin); //находим концы переходов
+                String defaultName = "REGEX.txt";
+                String newFileName = newFileNameGenerator(defaultName);
+                writeToNewFile(logInList, transitionBegin, transitionEnd, searchHits, newFileName);
             }
+            done = true;
         }
     }
 
     @Override
     public List<String> readFileAndRewriteInList() {
         List<String> readFile = new ArrayList<>();
+        BufferedReader reader = null;
+        InputStreamReader inputStreamReader = null;
+        FileInputStream fileInputStream = null;
         try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(LOG), StandardCharsets.UTF_8));
+            fileInputStream = new FileInputStream(LOG);
+            inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+            reader = new BufferedReader(inputStreamReader);
             String line;
             while ((line = reader.readLine()) != null) {
                 readFile.add(line);
             }
-            reader.close();
         } catch (Exception ex) {
             errorMessage = "Ошибка в логе: " + LOG.getName();
             ex.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    inputStreamReader.close();
+                    fileInputStream.close();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return readFile;
     }
@@ -102,21 +105,38 @@ public class RegExHandler implements Handler {
         return transitionEnd;
     }
 
-    @Override
-    public void writeToNewFile(List<String> oldLog, int begin, int end, String newFileName) {
+    public void writeToNewFile(List<String> oldLog, List<Integer> transitionBegin, List<Integer> transitionEnd, List<Integer> searchHits, String newFileName) {
         String newFilePath = NEW_LOG.getPath() + File.separator + newFileName;
+        BufferedWriter writer = null;
+        FileOutputStream fileOutputStream = null;
+        OutputStreamWriter outputStreamWriter = null;
         try {
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter (
-                            new FileOutputStream(newFilePath, true), StandardCharsets.UTF_8));
-            for (int i = begin; i <= end ; i++){
-                writer.write(oldLog.get(i) + "\n");
+            fileOutputStream = new FileOutputStream(newFilePath);
+            outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+            writer = new BufferedWriter(outputStreamWriter);
+            for (int i = 0; i < transitionBegin.size(); i++) {
+                if (checkInTransition(searchHits, transitionBegin.get(i), transitionEnd.get(i))) {
+                    for (int j = transitionBegin.get(i); j <= transitionEnd.get(i); j++){
+                        writer.write(oldLog.get(j) + "\n");
+                    }
+                }
             }
-            writer.close();
         }
-        catch (Exception ex){
+        catch (Exception ex) {
             errorMessage = "Ошибка записи в файл " + newFileName;
             ex.printStackTrace();
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                    outputStreamWriter.close();
+                    fileOutputStream.close();
+                }
+                catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
     }
 
