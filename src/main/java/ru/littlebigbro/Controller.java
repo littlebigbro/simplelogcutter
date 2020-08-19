@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -18,8 +17,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Controller {
-    private final String PAYLOG_PATTERN = "Шаблон для pay.log с поиском по GUID";
-    private final String REGEX_PATTERN = "Регулярное выражение";
+    private final String PAYLOG_PATTERN = "Обработка по GUID";
+    private final String REGEX_PATTERN = "Обработка по регулярному выражению";
     private final String ERROR = "Ошибка";
     private final String DONE = "Готово!";
     private Handler handler = null;
@@ -215,7 +214,7 @@ public class Controller {
         chooseFileTooltip.setText("Путь к файлу...");
 
         filePath.setTooltip(chooseFileTooltip);
-        chooseFolderTooltip.setText("Путь к папке...");
+        chooseFolderTooltip.setText("По-умолчанию путь к файлу...");
         saveDirectoryPath.setTooltip(chooseFolderTooltip);
         //Устанавливаем подсказки
         chooseFilePathButton.setTooltip(new Tooltip("Выбрать файл"));
