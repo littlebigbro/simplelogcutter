@@ -13,6 +13,7 @@ public class PayLogHandler implements Handler {
     private List<String> logInList;
     private String errorMessage = "FALSE";
     private boolean done = false;
+    private File newFile;
 
     public PayLogHandler(File log, File newLog, String searchString){
         this.LOG = log;
@@ -35,7 +36,7 @@ public class PayLogHandler implements Handler {
             } else {
                 List<Integer> transitionEnd = transitionEndCalc(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
                 String newFilePath = NEW_LOG.getPath() + File.separator + FileAction.newFileNameGenerator(NEW_LOG,SEARCHED_STRING + ".txt");
-                File newFile = new File(newFilePath);
+                newFile = new File(newFilePath);
                 FileAction.writeToNewFile(logInList, transitionBegin, transitionEnd, newFile);
                 done = true;
             }
@@ -61,6 +62,11 @@ public class PayLogHandler implements Handler {
     @Override
     public boolean getDone() {
         return done;
+    }
+
+    @Override
+    public String getNewFilePath() {
+        return newFile.getAbsolutePath();
     }
 
     private List<Integer> transitionEndCalc(List<Integer> stdPatternHits, List<Integer> transitionBegin) {

@@ -12,6 +12,7 @@ public class RegExHandler implements Handler {
     private List<String> logInList;
     private String errorMessage = "FALSE";
     private boolean done = false;
+    private File newFile;
 
     public RegExHandler(File log, File saveLog, String searchString){
         this.LOG = log;
@@ -53,7 +54,7 @@ public class RegExHandler implements Handler {
                 String defaultName = "REGEX.txt";
                 String newFileName = FileAction.newFileNameGenerator(NEW_LOG, defaultName);
                 String newFilePath = NEW_LOG.getPath() + File.separator + newFileName;
-                File newFile = new File(newFilePath);
+                newFile = new File(newFilePath);
                 FileAction.writeToNewFile(logInList, transitionBegin, transitionEnd, newFile);
                 done = true;
             }
@@ -81,6 +82,11 @@ public class RegExHandler implements Handler {
     @Override
     public boolean getDone() {
         return done;
+    }
+
+    @Override
+    public String getNewFilePath() {
+        return newFile.getAbsolutePath();
     }
 
     private boolean checkInTransition(List<Integer> searchHits, int begin, int end) {

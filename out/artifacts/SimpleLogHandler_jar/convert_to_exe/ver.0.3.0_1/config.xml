@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>jar\SimpleLogCutter.jar</jar>
+  <outfile>H:\Java\SimpleLogCutter\out\artifacts\SimpleLogHandler_jar\convert_to_exe\ver.0.3.0_1\LogHandler.exe</outfile>
+  <errTitle>Необходимо установить JRE/JDK</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest>H:\Java\SimpleLogCutter\out\artifacts\SimpleLogHandler_jar\convert_to_exe\ver.0.3.0_1\LogHandler.manifest</manifest>
+  <icon>H:\Java\SimpleLogCutter\out\artifacts\SimpleLogHandler_jar\convert_to_exe\ver.0.3.0_1\LogHandler.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.8.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+    <maxHeapSize>320</maxHeapSize>
+  </jre>
+</launch4jConfig>

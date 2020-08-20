@@ -22,28 +22,31 @@
       <Label layoutX="20.0" layoutY="70.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать файл для обработки" />
       <TextField fx:id="filePath" editable="false" layoutX="30.0" layoutY="95.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите файл для обработки">
          <tooltip>
-            <Tooltip fx:id="chooseFileTooltip" />
+            <Tooltip fx:id="tooltip_FilePath" />
          </tooltip></TextField>
       <Button fx:id="chooseFilePathButton" layoutX="340.0" layoutY="95.0" maxHeight="25.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#chooseFilePathAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать файл...">
          <tooltip>
-            <Tooltip fx:id="chooseFileButtonTooltip" />
+            <Tooltip fx:id="tooltip_ChooseFileButton" />
          </tooltip></Button>
       <Label layoutX="20.0" layoutY="145.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать папку для сохранения результата" />
       <TextField fx:id="saveDirectoryPath" editable="false" layoutX="30.0" layoutY="170.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите папку для сохранения">
          <tooltip>
-            <Tooltip fx:id="chooseFolderTooltip" />
+            <Tooltip fx:id="tooltip_SaveDirectoryPath" />
          </tooltip></TextField>
-      <Button fx:id="chooseSavePathButton" layoutX="340.0" layoutY="170.0" maxHeight="25.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#chooseSaveDirectoryAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать папку...">
+      <Button fx:id="chooseSaveDirectoryButton" layoutX="340.0" layoutY="170.0" maxHeight="25.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#chooseSaveDirectoryAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать папку...">
          <tooltip>
-            <Tooltip fx:id="saveFolderButtonTooltip" />
+            <Tooltip fx:id="tooltip_ChooseSaveDirectoryButton" />
          </tooltip></Button>
       <Label layoutX="20.0" layoutY="220.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать шаблон обработки pay.log" />
       <ComboBox fx:id="patternBox" layoutX="30.0" layoutY="245.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" onAction="#changePattenAction" prefHeight="25.0" prefWidth="300.0" />
-      <TextField fx:id="searchString" layoutX="30.0" layoutY="280.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" />
+      <TextField fx:id="searchString" layoutX="30.0" layoutY="280.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0">
+         <tooltip>
+            <Tooltip fx:id="tooltip_SearchString" />
+         </tooltip></TextField>
       <Button fx:id="handlerButton" layoutX="340.0" layoutY="245.0" maxHeight="60.0" maxWidth="115.0" minHeight="60.0" minWidth="115.0" mnemonicParsing="false" onAction="#ripTheDevilOutOfIt" prefHeight="60.0" prefWidth="115.0" text="Обработать">
          <tooltip>
-            <Tooltip fx:id="ripTheDevilTooltip" />
+            <Tooltip fx:id="tooltip_RipTheDevilOutOfIt" />
          </tooltip></Button>
-      <Label alignment="CENTER" layoutX="206.0" layoutY="316.0" maxHeight="20.0" maxWidth="70.0" minHeight="20.0" minWidth="70.0" prefHeight="20.0" prefWidth="70.0" text="build v.0.1.1" textAlignment="CENTER" textFill="#a1a1a1" />
+      <Label alignment="CENTER" layoutX="188.0" layoutY="316.0" maxHeight="20.0" maxWidth="100.0" minHeight="20.0" minWidth="70.0" prefHeight="20.0" prefWidth="100.0" text="о программе" textAlignment="CENTER" textFill="#a1a1a1" visible="false" />
    </children>
 </AnchorPane>

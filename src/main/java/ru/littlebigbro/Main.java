@@ -5,9 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.nio.file.Paths;
-
 public class Main extends Application {
 
     public static void main(String[] args) {
@@ -29,16 +26,19 @@ public class Main extends Application {
 +   8) выправить классы PayLogHandler и RegExHandler
     9) тесты?
 -   10) Почистить репозиторий от лишних файлов
-    11) красивости, проверить локаль
++-  11) красивости, проверить локаль
+    локаль у контекстного меню не подтягивается через .properties.
 +-  12) в связи с п.1 необходимо сделать так чтобы jar запускался через конфиг с нужными параметрами
         сделано через Start.bat
-    13) PROFIT
+    13) Добавить "О программе" в саму программу.
+    14) PROFIT
 */
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+//        ResourceBundle bundle = ResourceBundle.getBundle("context_menu", new Locale("ru", "RU"));
         Parent panel = FXMLLoader.load(getClass().getClassLoader().getResource("ru.littlebigbro.fxml"));
         Scene scene = new Scene(panel, 475, 340);
         primaryStage.sizeToScene();

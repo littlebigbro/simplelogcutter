@@ -8,10 +8,12 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -21,6 +23,7 @@ public class Controller {
     private final String REGEX_PATTERN = "Обработка по регулярному выражению";
     private final String ERROR = "Ошибка";
     private final String DONE = "Готово!";
+    private String alertMessage;
     private Handler handler = null;
 
     @FXML
@@ -33,25 +36,25 @@ public class Controller {
     private TextField filePath;
 
     @FXML
-    private Tooltip chooseFileTooltip;
+    private Tooltip tooltip_FilePath;
 
     @FXML
     private Button chooseFilePathButton;
 
     @FXML
-    private Tooltip chooseFileButtonTooltip;
+    private Tooltip tooltip_ChooseFileButton;
 
     @FXML
     private TextField saveDirectoryPath;
 
     @FXML
-    private Tooltip chooseFolderTooltip;
+    private Tooltip tooltip_SaveDirectoryPath;
 
     @FXML
-    private Button chooseSavePathButton;
+    private Button chooseSaveDirectoryButton;
 
     @FXML
-    private Tooltip saveFolderButtonTooltip;
+    private Tooltip tooltip_ChooseSaveDirectoryButton;
 
     @FXML
     private ComboBox<String> patternBox;
@@ -60,26 +63,31 @@ public class Controller {
     private TextField searchString;
 
     @FXML
+    private Tooltip tooltip_SearchString;
+
+    @FXML
     private Button handlerButton;
 
     @FXML
-    private Tooltip ripTheDevilTooltip;
+    private Tooltip tooltip_RipTheDevilOutOfIt;
+
 
     @FXML
     void changePattenAction(ActionEvent event) {
         switch (patternBox.getValue()) {
             case PAYLOG_PATTERN : {
                 searchString.setPromptText("Укажите GUID");
-                searchString.setTooltip(new Tooltip("Укажите GUID"));
+                tooltip_SearchString.setText("Укажите GUID");
                 break;
             }
 
             case REGEX_PATTERN : {
                 searchString.setPromptText("Укажите регулярное выражение");
-                searchString.setTooltip(new Tooltip("Укажите регулярное выражение"));
+                tooltip_SearchString.setText("Укажите регулярное выражение");
                 break;
             }
         }
+        searchString.setTooltip(tooltip_SearchString);
     }
 
     @FXML
@@ -97,7 +105,7 @@ public class Controller {
         if (fileObject != null) {
             filePath.setText(fileObject.getPath());
         }
-        chooseFileTooltip.setText(filePath.getText());
+        tooltip_FilePath.setText(filePath.getText());
     }
 
     @FXML
@@ -108,42 +116,55 @@ public class Controller {
         if (!saveDirectoryPath.getText().isEmpty()) {
             directoryChooser.setInitialDirectory(new File(saveDirectoryPath.getText()));
         }
-        directoryChooser.setTitle("Выбор папки сохранения");
+        directoryChooser.setTitle("Выбор папки для сохранения");
         File directoryObject = directoryChooser.showDialog(primaryStage);
         if (directoryObject != null) {
             saveDirectoryPath.setText(directoryObject.getPath());
         }
-        chooseFolderTooltip.setText(saveDirectoryPath.getText());
+        tooltip_SaveDirectoryPath.setText(saveDirectoryPath.getText());
     }
 
     @FXML
     void ripTheDevilOutOfIt(ActionEvent event) {
-        String alertMessage;
         String userString = searchString.getText().trim();
-        boolean userStringIsCool = false;
         if (!userString.isEmpty()){
-            switch (patternBox.getValue()) {
-                case PAYLOG_PATTERN : {
-                    if (userString.matches("[0-9a-zA-Z]{8}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{12}")) {
-                        userStringIsCool = true;
-                    } else {
-                        userStringIsCool = false;
-                        alertMessage = "Указанный GUID имеет неверный формат";
-                        alertGenerator(ERROR, alertMessage);
-                    }
-                    break;
+            if(!filePath.getText().isEmpty() && userStringMatcher(userString)) {
+                if (saveDirectoryPath.getText().isEmpty()) {
+                    saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
                 }
-                case REGEX_PATTERN : {
-                    try {
-                        Pattern.compile(userString);
-                        userStringIsCool = true;
+                File log = new File(filePath.getText());
+                File saveLog = new File(saveDirectoryPath.getText());
+                ProcessingTemplate processingTemplate = new ProcessingTemplate();
+                switch (patternBox.getValue()) {
+                    case PAYLOG_PATTERN: {
+                        handler = new PayLogHandler(log, saveLog, userString);
+                        processingTemplate.setHandler(handler);
+                        processingTemplate.executeHandler();
+                        break;
                     }
-                    catch (PatternSyntaxException e) {
-                        userStringIsCool = false;
-                        alertMessage = "Указанное регулярное выражение имеет неверный формат";
-                        alertGenerator(ERROR, alertMessage);
+
+                    case REGEX_PATTERN: {
+                        handler = new RegExHandler(log, saveLog, userString);
+                        processingTemplate.setHandler(handler);
+                        processingTemplate.executeHandler();
+                        break;
                     }
-                    break;
+                }
+                if(!handler.getErrorMessage().equals("FALSE") || handler.getDone()) {
+                    String alertType = ERROR;
+                    if (handler.getDone()){
+                        alertType = DONE;
+                        alertMessage = "Обработка завершена!!! \nФайл сохранён по пути: " + handler.getNewFilePath();
+                    } else {
+                        alertMessage = handler.getErrorMessage();
+                    }
+                    alertGenerator(alertType, alertMessage);
+                }
+                handler = null;
+            } else {
+                if (filePath.getText().isEmpty()){
+                    alertMessage = "Не указан путь к обрабатываемому файлу";
+                    alertGenerator(ERROR, alertMessage);
                 }
             }
         } else {
@@ -152,53 +173,6 @@ public class Controller {
                 alertGenerator(ERROR, alertMessage);
             }
         }
-        if(!filePath.getText().isEmpty() && userStringIsCool) {
-            if (saveDirectoryPath.getText().isEmpty()) {
-                saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
-            }
-
-            File log = new File(filePath.getText());
-            File saveLog = new File(saveDirectoryPath.getText());
-            ProcessingTemplate processingTemplate = new ProcessingTemplate();
-            switch (patternBox.getValue()) {
-                case PAYLOG_PATTERN : {
-                    handler = new PayLogHandler(log, saveLog, userString);
-                    processingTemplate.setHandler(handler);
-                    processingTemplate.executeHandler();
-                    break;
-                }
-
-                case REGEX_PATTERN : {
-                    handler = new RegExHandler(log, saveLog, userString);
-                    processingTemplate.setHandler(handler);
-                    processingTemplate.executeHandler();
-                    break;
-                }
-
-                default : {
-                    handler = new PayLogHandler(log, saveLog, userString);
-                    processingTemplate.setHandler(handler);
-                    processingTemplate.executeHandler();
-                }
-            }
-            if(!handler.getErrorMessage().equals("FALSE") || handler.getDone()) {
-                String alertType = ERROR;
-                if (handler.getDone()){
-                    alertType = DONE;
-                    alertMessage = "Обработка завершена. Файл сохранён по пути: " + saveDirectoryPath.getText();
-                } else {
-                    alertMessage = handler.getErrorMessage();
-                }
-                alertGenerator(alertType, alertMessage);
-            }
-            handler = null;
-        } else {
-            if (filePath.getText().isEmpty()){
-                alertMessage = "Не указан путь к обрабатываемому файлу";
-                alertGenerator(ERROR, alertMessage);
-            }
-        }
-
     }
 
     @FXML
@@ -209,26 +183,65 @@ public class Controller {
         patternBox.getItems().addAll(patternsList);
         patternBox.setValue(PAYLOG_PATTERN);
         searchString.setPromptText("Укажите GUID");
-        searchString.setTooltip(new Tooltip("Укажите GUID"));
-
-        chooseFileTooltip.setText("Путь к файлу...");
-
-        filePath.setTooltip(chooseFileTooltip);
-        chooseFolderTooltip.setText("По-умолчанию путь к файлу...");
-        saveDirectoryPath.setTooltip(chooseFolderTooltip);
-        //Устанавливаем подсказки
-        chooseFilePathButton.setTooltip(new Tooltip("Выбрать файл"));
-        chooseSavePathButton.setTooltip(new Tooltip("Выбрать папку"));
-        handlerButton.setTooltip(new Tooltip("Rip the devil out of it!"));
+        setTooltips();
 
     }
 
-    void alertGenerator (String title, String contentText) {
+    private void setTooltips() {
+        tooltip_FilePath.setText("Путь к файлу..");
+        filePath.setTooltip(tooltip_FilePath);
+
+        tooltip_ChooseFileButton.setText("Выбрать файл");
+        chooseFilePathButton.setTooltip(tooltip_ChooseFileButton);
+
+        tooltip_SaveDirectoryPath.setText("Путь к папке..");
+        saveDirectoryPath.setTooltip(tooltip_SaveDirectoryPath);
+
+        tooltip_ChooseSaveDirectoryButton.setText("Выбрать папку");
+        chooseSaveDirectoryButton.setTooltip(tooltip_ChooseSaveDirectoryButton);
+
+        tooltip_SearchString.setText("Укажие GUID");
+        searchString.setTooltip(tooltip_SearchString);
+
+        tooltip_RipTheDevilOutOfIt.setText("Rip the devil out of it!");
+        handlerButton.setTooltip(tooltip_RipTheDevilOutOfIt);
+    }
+
+    private void alertGenerator (String title, String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(contentText);
         alert.setHeaderText(null);
         alert.showAndWait();
         alert.close();
+    }
+
+    private boolean userStringMatcher(String userString) {
+        boolean userStringMatch = false;
+        switch (patternBox.getValue()) {
+            case PAYLOG_PATTERN : {
+                if (userString.matches("[0-9a-zA-Z]{8}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{12}")) {
+                    userStringMatch = true;
+                } else {
+                    userStringMatch = false;
+                    alertMessage = "Указанный GUID имеет неверный формат";
+                    alertGenerator(ERROR, alertMessage);
+                }
+                break;
+            }
+            case REGEX_PATTERN : {
+                try {
+                    Pattern.compile(userString);
+                    userStringMatch = true;
+                }
+                catch (PatternSyntaxException e) {
+                    userStringMatch = false;
+                    alertMessage = "Указанное регулярное выражение имеет неверный формат";
+                    alertGenerator(ERROR, alertMessage);
+                }
+                break;
+            }
+        }
+        return userStringMatch;
     }
 }

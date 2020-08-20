@@ -7,4 +7,5 @@ public interface Handler {
     List<Integer> searchByPattern(String pattern);
     String getErrorMessage();
     boolean getDone();
+    String getNewFilePath();
 }
