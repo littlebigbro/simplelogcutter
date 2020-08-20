@@ -12,16 +12,15 @@ import java.util.stream.Stream;
 public class FileAction {
 
     public static List<String> readFileToList(File file) {
-        List<String> readFile = new ArrayList<>();
+        List<String> readFile = new ArrayList<String>();
         BufferedReader reader = null;
         InputStreamReader inputStreamReader = null;
         FileInputStream fileInputStream = null;
-        Stream<String> stream;
         try {
             fileInputStream = new FileInputStream(file);
             inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             reader = new BufferedReader(inputStreamReader);
-            stream = reader.lines();
+            Stream<String> stream = reader.lines();
             readFile = stream.collect(Collectors.toList());
         }
         catch (Exception ex) {
@@ -48,7 +47,7 @@ public class FileAction {
     public static String newFileNameGenerator(File filePath, String defaultName) {
         File[] filesList = filePath.listFiles();
         if (filesList != null && filesList.length != 0) {
-            List <String> fileNames = new ArrayList<>();
+            List <String> fileNames = new ArrayList<String>();
             for (File file : filesList) {
                 fileNames.add(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(File.separator) + 1));//обрезает путь без сепаратора если убрать " + 1"
             }

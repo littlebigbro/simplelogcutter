@@ -5,6 +5,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.nio.file.Paths;
+
 public class Main extends Application {
 
     public static void main(String[] args) {
@@ -36,7 +39,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent panel = FXMLLoader.load(getClass().getResource("ru.littlebigbro.fxml"));
+        Parent panel = FXMLLoader.load(getClass().getClassLoader().getResource("ru.littlebigbro.fxml"));
         Scene scene = new Scene(panel, 475, 340);
         primaryStage.sizeToScene();
         primaryStage.setTitle("Обработчик логов");

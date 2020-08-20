@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="0" maxWidth="0" minHeight="0" minWidth="0" prefHeight="340.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.littlebigbro.Controller">
+   <children>
+      <ImageView disable="true" fitHeight="340.0" fitWidth="475.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" scaleZ="0.0">
+         <image>
+            <Image url="@img/back.png" />
+         </image>
+         <rotationAxis>
+            <Point3D />
+         </rotationAxis></ImageView>
+      <Label layoutX="20.0" layoutY="70.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать файл для обработки" />
+      <TextField fx:id="filePath" editable="false" layoutX="30.0" layoutY="95.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите файл для обработки">
+         <tooltip>
+            <Tooltip fx:id="chooseFileTooltip" />
+         </tooltip></TextField>
+      <Button fx:id="chooseFilePathButton" layoutX="340.0" layoutY="95.0" maxHeight="25.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#chooseFilePathAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать файл...">
+         <tooltip>
+            <Tooltip fx:id="chooseFileButtonTooltip" />
+         </tooltip></Button>
+      <Label layoutX="20.0" layoutY="145.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать папку для сохранения результата" />
+      <TextField fx:id="saveDirectoryPath" editable="false" layoutX="30.0" layoutY="170.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" promptText="Укажите папку для сохранения">
+         <tooltip>
+            <Tooltip fx:id="chooseFolderTooltip" />
+         </tooltip></TextField>
+      <Button fx:id="chooseSavePathButton" layoutX="340.0" layoutY="170.0" maxHeight="25.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#chooseSaveDirectoryAction" prefHeight="25.0" prefWidth="115.0" text="Выбрать папку...">
+         <tooltip>
+            <Tooltip fx:id="saveFolderButtonTooltip" />
+         </tooltip></Button>
+      <Label layoutX="20.0" layoutY="220.0" maxHeight="20.0" maxWidth="250.0" minHeight="20.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" text="Выбрать шаблон обработки pay.log" />
+      <ComboBox fx:id="patternBox" layoutX="30.0" layoutY="245.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" onAction="#changePattenAction" prefHeight="25.0" prefWidth="300.0" />
+      <TextField fx:id="searchString" layoutX="30.0" layoutY="280.0" maxHeight="25.0" maxWidth="300.0" minHeight="25.0" minWidth="300.0" prefHeight="25.0" prefWidth="300.0" />
+      <Button fx:id="handlerButton" layoutX="340.0" layoutY="245.0" maxHeight="60.0" maxWidth="115.0" minHeight="60.0" minWidth="115.0" mnemonicParsing="false" onAction="#ripTheDevilOutOfIt" prefHeight="60.0" prefWidth="115.0" text="Обработать">
+         <tooltip>
+            <Tooltip fx:id="ripTheDevilTooltip" />
+         </tooltip></Button>
+      <Label alignment="CENTER" layoutX="206.0" layoutY="316.0" maxHeight="20.0" maxWidth="70.0" minHeight="20.0" minWidth="70.0" prefHeight="20.0" prefWidth="70.0" text="build v.0.1.1" textAlignment="CENTER" textFill="#a1a1a1" />
+   </children>
+</AnchorPane>

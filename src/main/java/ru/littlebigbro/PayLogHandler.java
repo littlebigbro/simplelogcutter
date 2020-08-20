@@ -44,7 +44,7 @@ public class PayLogHandler implements Handler {
 
     @Override
     public List<Integer> searchByPattern(String pattern) {
-        List<Integer> hitRows = new ArrayList<>();
+        List<Integer> hitRows = new ArrayList<Integer>();
         for (int i = 0; i < logInList.size(); i++) {
             if (Pattern.matches(pattern, logInList.get(i))) {     //быстро, но больше памяти жрёт
                 hitRows.add(i);
@@ -64,7 +64,7 @@ public class PayLogHandler implements Handler {
     }
 
     private List<Integer> transitionEndCalc(List<Integer> stdPatternHits, List<Integer> transitionBegin) {
-        List <Integer> transitionEnd = new ArrayList<>();
+        List <Integer> transitionEnd = new ArrayList<Integer>();
         for (Integer row : transitionBegin) {
             for (int j = 0; j < stdPatternHits.size(); j++) {
                 if (row.intValue() == stdPatternHits.get(j).intValue()) {

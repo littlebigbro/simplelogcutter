@@ -203,7 +203,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        List<String> patternsList = new ArrayList<>();
+        List<String> patternsList = new ArrayList<String>();
         patternsList.add(PAYLOG_PATTERN);
         patternsList.add(REGEX_PATTERN);
         patternBox.getItems().addAll(patternsList);

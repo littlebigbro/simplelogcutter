@@ -36,8 +36,8 @@ public class RegExHandler implements Handler {
             if (searchHits.isEmpty()) {
                 errorMessage = "По регулярному выражению \"" + SEARCH_PATTERN + "\" ничего не найдено.";
             } else {
-                List<Integer> transitionBegin = new ArrayList<>();
-                List<Integer> transitionEnd = new ArrayList<>();
+                List<Integer> transitionBegin = new ArrayList<Integer>();
+                List<Integer> transitionEnd = new ArrayList<Integer>();
                 //находим границы переходов
                 for (int j = 0; j < stdPatternHits.size(); j++) {
                     if (j + 1 < stdPatternHits.size()) {
@@ -62,7 +62,7 @@ public class RegExHandler implements Handler {
 
     @Override
     public List<Integer> searchByPattern(String pattern) {
-        List<Integer> hitRows = new ArrayList<>();
+        List<Integer> hitRows = new ArrayList<Integer>();
         String line;
         for (int i = 0; i < logInList.size(); i++) {
             line = logInList.get(i);
