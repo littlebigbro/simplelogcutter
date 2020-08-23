@@ -1,0 +1,50 @@
+08-07;13:23:12.512 DEBUG [.kernel.Default (self-tuning)'][                       MSC_PmOrderPBS_lc]: Лог перехода storeFromWS для документа d06da315-0565-472c-88e6-068619e4cfe8 с типом MSC_PAYM_ORDER_PBS: Результат для документа: guid=d06da315-0565-472c-88e6-068619e4cfe8 , doctype=MSC_PAYM_ORDER_PBS , docservice=EXP
+[Лог обработки]: Начало выполнения перехода storeFromWS (Сохранение из Веб Сервиса) ЖЦ MSC_PmOrderPBS_lc
+Начало выполнения действия ЖЦ simpleSelectwFQ (Отбор значений из Книга регистрации лицевых счетов Код ТОФК открытия ЛС плательщика если документ мигрирован)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_SOURCE (ПУДС) = ASFK, результат: false
+Проверка условий для экшена не пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ setFieldValueCall (Выполняет выставление значение #{R.DICT.SERVICETOFKCODE_CODE} в поле документа Код ТОФК АСФК [DOC.SI_CODETOFKASFK])
+Выполняется проверка условий для экшена setFieldValueCall, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_ERRINCOMING (null) = 1, результат: false
+Проверка условий для экшена не пройдена setFieldValueCall для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ simpleSelectwFQ (Отбор значений из Соответствие ЦС и РЦ при КС Код ТОФК РЦ если документ мигрирован)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_SOURCE (ПУДС) = ASFK, результат: false
+Проверка условий для экшена не пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ simpleSelectwFQ (Отбор значений из Книга регистрации лицевых счетов лицевого счета для ТОФКа РЦ)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_SOURCE (ПУДС) = ASFK, результат: false
+Проверка условий для экшена не пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ setFieldValueCall (Выполняет выставление значение #{RCAC.DICT.ACCOUNTNUMBER} в поле документа Расчетный счет РЦ [DOC.SI_CHECKACC_RC] если документ мигрирован)
+Выполняется проверка условий для экшена setFieldValueCall, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ |\ результат условия NOT: false
+ | | проверка условия RCAC.DICT.ACCOUNTNUMBER (null) IS NULL, результат: true
+Проверка условий для экшена не пройдена setFieldValueCall для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ simpleSelectwFQ (Выбор код ТОФК для расчетного документа если не мигрирован документ не из ПУР КС и тип ЭДВ)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ |\ результат условия NOT: true
+ | | проверка условия DOC.SI_SOURCE (ПУДС) = ASFK, результат: false
+Проверка условий для экшена пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Запрашивается параметр DOC_SYS_NAME для операции simpleSelectwFQ. Требуемый класс STRING. Получено значение REF_BankAccount
+Запрашивается параметр FILTER_QUERY для операции simpleSelectwFQ. Требуемый класс STRING. Получено значение fields.DICT.STATUS = 'ACTIVE' and fields.DICT.ACCOUNTNUMBER = #{DOC.R_CHECKACC}
+Запрашивается параметр RESULT_PARAM_NAME для операции simpleSelectwFQ. Требуемый класс STRING.Значение по умолчанию null. Получено значение BANK
+Запрашивается параметр FIELDS для операции simpleSelectwFQ. Требуемый класс STRING.Значение по умолчанию null. Получено значение DICT.TOFKCODE
+Запрашивается параметр FIELD_TYPES для операции simpleSelectwFQ. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Запрашивается параметр MULTIPLE для операции simpleSelectwFQ. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр SELECT_ONLY_FIRST для операции simpleSelectwFQ. Требуемый класс BOOLEAN.Значение по умолчанию false. Получено значение true
+Запрашивается параметр FILTER_MAPPING для операции simpleSelectwFQ. Требуемый класс STRING.Значение по умолчанию null. Получено значение null
+Операция simpleSelectwFQ выставляет значение 6000 в параметр BANK.DICT.TOFKCODE с типом STRING. Значение будет доступно в переменной с именем BANK.DICT.TOFKCODE
+Выполнение операции simpleSelectwFQ перехода storeFromWS для документа с guid d06da315-0565-472c-88e6-068619e4cfe8 успешно завершено за 25 ms
+Начало выполнения действия ЖЦ simpleSelectwFQ (Выбор код ТОФК для расчетного документа если не мигрирован документ и из ПУР КС с типом ЭДИ)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_SOURCE (ПУДС) = TSE, результат: false
+Проверка условий для экшена не пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ simpleSelectwFQ (Выбор код ТОФК для расчетного документа если документ мигрирован)
+Выполняется проверка условий для экшена simpleSelectwFQ, для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+ | проверка условия DOC.SI_SOURCE (ПУДС) = ASFK, результат: false
+Проверка условий для экшена не пройдена simpleSelectwFQ для документа с guid d06da315-0565-472c-88e6-068619e4cfe8
+Начало выполнения действия ЖЦ simpleSelectwFQ (Выбор системного наименование ТОФКа для сохранения документа)
+Запрашивается параметр DOC_SYS_NAME для операции simpleSelectwFQ. Требуемый класс STRING. Получено значение REF_UBPandNUBP
+Запрашивается параметр FILTER_QUERY для операции simpleSelectwFQ. Требуемый класс STRING. Получено значение fields.DICT.STATUS = 'ACTIVE' and fields.DICT.SELFORFKCODE = #{BANK.DICT.TOFKCODE} and fields.DICT.PO_KBKGLAVACODE_CODE = '100'
+Запрашивается параметр RESULT_PARAM_NAME для операции simpleSelectwFQ. Требуемый класс STRING.Значение по умолчанию null. Получено значение ORG

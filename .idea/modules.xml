@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SimpleLogHandler.iml" filepath="$PROJECT_DIR$/SimpleLogHandler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleLogCutter.iml" filepath="$PROJECT_DIR$/SimpleLogCutter.iml" />
     </modules>
   </component>
 </project>

@@ -7,47 +7,45 @@ import java.util.regex.Pattern;
 
 public class PayLogHandler implements Handler {
 
-    private final File LOG;
-    private final File NEW_LOG;
-    private final String SEARCHED_STRING;
     private List<String> logInList;
     private String errorMessage = "FALSE";
     private boolean done = false;
     private File newFile;
 
-    public PayLogHandler(File log, File newLog, String searchString){
-        this.LOG = log;
-        this.SEARCHED_STRING = searchString;
-        this.NEW_LOG = newLog;
-    }
 
     @Override
-    public void startAlgorithm() {
-        logInList = FileAction.readFileToList(LOG);
+    public void startAlgorithm(File log, File newLog, String searchedString) {
+
+        logInList = FileAction.readFileToList(log);
         if (logInList.isEmpty()) {
             errorMessage = "Обрабатываемый файл пуст";
-        } else {
-            String standardPattern = "(.*)Лог перехода(.*)для документа(.*)";
-            String searchPattern = "(.*)Лог перехода(.*)для документа " + SEARCHED_STRING + "(.*)";
-            List<Integer> stdPatternHits = searchByPattern(standardPattern); //находим начала всех переходов в логе
-            List<Integer> transitionBegin = searchByPattern(searchPattern); //находим начала переходов по гуиду
-            if (transitionBegin.isEmpty()) {
-                errorMessage = "По значению \"" + SEARCHED_STRING + "\" ничего не найдено.";
-            } else {
-                List<Integer> transitionEnd = transitionEndCalc(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
-                String newFilePath = NEW_LOG.getPath() + File.separator + FileAction.newFileNameGenerator(NEW_LOG,SEARCHED_STRING + ".txt");
-                newFile = new File(newFilePath);
-                FileAction.writeToNewFile(logInList, transitionBegin, transitionEnd, newFile);
-                done = true;
-            }
+            return;
         }
+        String standardPattern = "(.*)Лог перехода(.*)для документа(.*)";
+        String searchPattern = "(.*)Лог перехода(.*)для документа " + searchedString + "(.*)";
+        List<Integer> stdPatternHits = searchByPattern(standardPattern); //находим начала всех переходов в логе
+        if (stdPatternHits.isEmpty()){
+            errorMessage = "Выбранный файл не pay.log";
+            return;
+        }
+        List<Integer> transitionBegin = searchByPattern(searchPattern); //находим начала переходов по гуиду
+        if (transitionBegin.isEmpty()) {
+            errorMessage = "По значению \"" + searchedString + "\" ничего не найдено.";
+            return;
+        }
+        List<Integer> transitionEnd = transitionEndCalc(stdPatternHits, transitionBegin); //находим концы переходов по гуиду
+        String newFilePath = newLog.getPath() + File.separator + FileAction.newFileNameGenerator(newLog, searchedString + ".txt");
+        newFile = new File(newFilePath);
+        FileAction.writeToNewFile(logInList, transitionBegin, transitionEnd, newFile);
+        done = true;
     }
 
     @Override
     public List<Integer> searchByPattern(String pattern) {
-        List<Integer> hitRows = new ArrayList<Integer>();
+        List<Integer> hitRows = new ArrayList<>();
+        //быстро, но больше памяти жрёт
         for (int i = 0; i < logInList.size(); i++) {
-            if (Pattern.matches(pattern, logInList.get(i))) {     //быстро, но больше памяти жрёт
+            if (Pattern.matches(pattern, logInList.get(i))) {
                 hitRows.add(i);
             }
         }
@@ -70,7 +68,7 @@ public class PayLogHandler implements Handler {
     }
 
     private List<Integer> transitionEndCalc(List<Integer> stdPatternHits, List<Integer> transitionBegin) {
-        List <Integer> transitionEnd = new ArrayList<Integer>();
+        List <Integer> transitionEnd = new ArrayList<>();
         for (Integer row : transitionBegin) {
             for (int j = 0; j < stdPatternHits.size(); j++) {
                 if (row.intValue() == stdPatternHits.get(j).intValue()) {

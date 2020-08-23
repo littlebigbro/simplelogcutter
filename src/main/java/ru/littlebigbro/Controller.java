@@ -134,22 +134,22 @@ public class Controller {
                 }
                 File log = new File(filePath.getText());
                 File saveLog = new File(saveDirectoryPath.getText());
-                ProcessingTemplate processingTemplate = new ProcessingTemplate();
                 switch (patternBox.getValue()) {
                     case PAYLOG_PATTERN: {
-                        handler = new PayLogHandler(log, saveLog, userString);
-                        processingTemplate.setHandler(handler);
-                        processingTemplate.executeHandler();
+                        handler = new PayLogHandler();
                         break;
                     }
 
                     case REGEX_PATTERN: {
-                        handler = new RegExHandler(log, saveLog, userString);
-                        processingTemplate.setHandler(handler);
-                        processingTemplate.executeHandler();
+                        handler = new RegExHandler();
                         break;
                     }
                 }
+
+                ProcessingTemplate processingTemplate = new ProcessingTemplate();
+                processingTemplate.setHandler(handler);
+                processingTemplate.executeHandler(log, saveLog, userString);
+
                 if(!handler.getErrorMessage().equals("FALSE") || handler.getDone()) {
                     String alertType = ERROR;
                     if (handler.getDone()){
@@ -168,16 +168,14 @@ public class Controller {
                 }
             }
         } else {
-            if (!filePath.getText().isEmpty()) {
-                alertMessage = "Поисковой запрос пуст";
-                alertGenerator(ERROR, alertMessage);
-            }
+            alertMessage = filePath.getText().isEmpty() ? "Не выбран файлд для обработки, и не указан поисковой запрос" : "Поисковой запрос пуст";
+            alertGenerator(ERROR, alertMessage);
         }
     }
 
     @FXML
     void initialize() {
-        List<String> patternsList = new ArrayList<String>();
+        List<String> patternsList = new ArrayList<>();
         patternsList.add(PAYLOG_PATTERN);
         patternsList.add(REGEX_PATTERN);
         patternBox.getItems().addAll(patternsList);
