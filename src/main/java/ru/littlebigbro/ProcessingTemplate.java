@@ -1,6 +1,7 @@
 package ru.littlebigbro;
 
-import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class ProcessingTemplate {
 
@@ -10,7 +11,7 @@ public class ProcessingTemplate {
         this.handler = handler;
     }
 
-    public void executeHandler(File file, File newFile, String searchedString) {
-        handler.startAlgorithm(file, newFile, searchedString);
+    public void executeHandler(Map<String,String> params) throws IOException {
+        handler.performingChecks(params);
     }
 }

@@ -1,19 +1,14 @@
 package ru.littlebigbro;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import java.util.*;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,6 +20,7 @@ public class Controller {
     private final String DONE = "Готово!";
     private String alertMessage;
     private Handler handler = null;
+    private boolean handlingIsSuccess = false;
 
     @FXML
     private ResourceBundle resources;
@@ -104,6 +100,7 @@ public class Controller {
         File fileObject = fileChooser.showOpenDialog(primaryStage);
         if (fileObject != null) {
             filePath.setText(fileObject.getPath());
+            handlingIsSuccess = false;
         }
         tooltip_FilePath.setText(filePath.getText());
     }
@@ -125,52 +122,42 @@ public class Controller {
     }
 
     @FXML
-    void ripTheDevilOutOfIt(ActionEvent event) {
+    void ripTheDevilOutOfIt(ActionEvent event) throws IOException {
         String userString = searchString.getText().trim();
-        if (!userString.isEmpty()){
-            if(!filePath.getText().isEmpty() && userStringMatcher(userString)) {
-                if (saveDirectoryPath.getText().isEmpty()) {
-                    saveDirectoryPath.setText(filePath.getText().substring(0, filePath.getText().lastIndexOf(File.separator)));
-                }
-                File log = new File(filePath.getText());
-                File saveLog = new File(saveDirectoryPath.getText());
-                switch (patternBox.getValue()) {
-                    case PAYLOG_PATTERN: {
-                        handler = new PayLogHandler();
-                        break;
-                    }
-
-                    case REGEX_PATTERN: {
-                        handler = new RegExHandler();
-                        break;
-                    }
-                }
-
-                ProcessingTemplate processingTemplate = new ProcessingTemplate();
-                processingTemplate.setHandler(handler);
-                processingTemplate.executeHandler(log, saveLog, userString);
-
-                if(!handler.getErrorMessage().equals("FALSE") || handler.getDone()) {
-                    String alertType = ERROR;
-                    if (handler.getDone()){
-                        alertType = DONE;
-                        alertMessage = "Обработка завершена!!! \nФайл сохранён по пути: " + handler.getNewFilePath();
-                    } else {
-                        alertMessage = handler.getErrorMessage();
-                    }
-                    alertGenerator(alertType, alertMessage);
-                }
-                handler = null;
-            } else {
-                if (filePath.getText().isEmpty()){
-                    alertMessage = "Не указан путь к обрабатываемому файлу";
-                    alertGenerator(ERROR, alertMessage);
-                }
+        switch (patternBox.getValue()) {
+            case PAYLOG_PATTERN: {
+                handler = new PayLogHandler();
+                break;
             }
-        } else {
-            alertMessage = filePath.getText().isEmpty() ? "Не выбран файлд для обработки, и не указан поисковой запрос" : "Поисковой запрос пуст";
-            alertGenerator(ERROR, alertMessage);
+            case REGEX_PATTERN: {
+                handler = new RegExHandler();
+                break;
+            }
         }
+        Map<String,String> params = new HashMap<>();
+        params.put("FILE_PATH", filePath.getText());
+        params.put("NEW_FILE_PATH", saveDirectoryPath.getText());
+        params.put("SEARCH_STRING", userString);
+
+        ProcessingTemplate processingTemplate = new ProcessingTemplate();
+        processingTemplate.setHandler(handler);
+        processingTemplate.executeHandler(params);
+
+        if (handler.getNewFilePath() != null) {
+            saveDirectoryPath.setText(handler.getNewFilePath());
+        }
+        handlingIsSuccess = handler.getDone();
+        if(!handler.getErrorMessage().equals("FALSE") || handlingIsSuccess) {
+            String alertType = ERROR;
+            if (handler.getDone()){
+                alertType = DONE;
+                alertMessage = "Обработка завершена!!! \nФайл сохранён по пути: " + handler.getNewFilePath();
+            } else {
+                alertMessage = handler.getErrorMessage();
+            }
+            alertGenerator(alertType, alertMessage);
+        }
+        handler = null;
     }
 
     @FXML
@@ -182,7 +169,6 @@ public class Controller {
         patternBox.setValue(PAYLOG_PATTERN);
         searchString.setPromptText("Укажите GUID");
         setTooltips();
-
     }
 
     private void setTooltips() {
@@ -212,34 +198,5 @@ public class Controller {
         alert.setHeaderText(null);
         alert.showAndWait();
         alert.close();
-    }
-
-    private boolean userStringMatcher(String userString) {
-        boolean userStringMatch = false;
-        switch (patternBox.getValue()) {
-            case PAYLOG_PATTERN : {
-                if (userString.matches("[0-9a-zA-Z]{8}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{4}[-][0-9a-zA-Z]{12}")) {
-                    userStringMatch = true;
-                } else {
-                    userStringMatch = false;
-                    alertMessage = "Указанный GUID имеет неверный формат";
-                    alertGenerator(ERROR, alertMessage);
-                }
-                break;
-            }
-            case REGEX_PATTERN : {
-                try {
-                    Pattern.compile(userString);
-                    userStringMatch = true;
-                }
-                catch (PatternSyntaxException e) {
-                    userStringMatch = false;
-                    alertMessage = "Указанное регулярное выражение имеет неверный формат";
-                    alertGenerator(ERROR, alertMessage);
-                }
-                break;
-            }
-        }
-        return userStringMatch;
     }
 }

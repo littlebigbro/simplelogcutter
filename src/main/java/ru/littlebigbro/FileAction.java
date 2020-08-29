@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 
 public class FileAction {
 
-    public static List<String> readFileToList(File file) {
-        List<String> readFile = new ArrayList<String>();
+    public static List<String> readFileToList(File file) throws IOException {
+        List<String> readFile;
         BufferedReader reader = null;
         InputStreamReader inputStreamReader = null;
         FileInputStream fileInputStream = null;
@@ -23,8 +23,9 @@ public class FileAction {
             Stream<String> stream = reader.lines();
             readFile = stream.collect(Collectors.toList());
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (IOException ioException) {
+            ioException.printStackTrace();
+            throw ioException;
         }
         finally {
             if (reader != null) {
@@ -33,23 +34,34 @@ public class FileAction {
                     inputStreamReader.close();
                     fileInputStream.close();
                 }
-                catch (Exception e) {
-                    e.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
         return readFile;
     }
+
 /**
  * Метод генерирует новое имя для файла в формате "fileName(i).format", 
  * если по предоставленному пути filepath есть файл с именем defaultName.
  * */
     public static String newFileNameGenerator(File filePath, String defaultName) {
-        File[] filesList = filePath.listFiles();
+        File[] filesList;
+        if (filePath == null || filePath.getAbsolutePath().isEmpty()) {
+            return "ERROR";
+        } else {
+            filesList= filePath.listFiles();
+        }
+        if (defaultName == null || defaultName.isEmpty()) {
+            defaultName = "default_name.txt";
+        }
+
         if (filesList != null && filesList.length != 0) {
-            List <String> fileNames = new ArrayList<String>();
+            List <String> fileNames = new ArrayList<>();
             for (File file : filesList) {
-                fileNames.add(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(File.separator) + 1));//обрезает путь без сепаратора если убрать " + 1"
+                //обрезает путь до последнего сепаратора, поэтому чтобы он был добавляется "+ 1"
+                fileNames.add(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(File.separator) + 1));
             }
             if (!fileNames.contains(defaultName)) {
                 return defaultName;
@@ -74,12 +86,18 @@ public class FileAction {
         }
     }
 
-    public static void writeToNewFile(List<String> fileInList, List<Integer> transitionBegin, List<Integer> transitionEnd, File fileName) {
+    public static String writeToNewFile(List<String> fileInList, List<Integer> transitionBegin, List<Integer> transitionEnd, File newFileName) throws IOException {
+        String alert = "ERROR";
+        if (fileInList == null || transitionBegin == null ||
+                transitionEnd == null || newFileName == null ||
+                newFileName.getAbsolutePath().isEmpty()) {
+            return alert;
+        }
         BufferedWriter writer = null;
         FileOutputStream fileOutputStream = null;
         OutputStreamWriter outputStreamWriter = null;
         try {
-            fileOutputStream = new FileOutputStream(fileName);
+            fileOutputStream = new FileOutputStream(newFileName);
             outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
             writer = new BufferedWriter(outputStreamWriter);
             for (int i = 0; i < transitionBegin.size(); i++) {
@@ -87,9 +105,11 @@ public class FileAction {
                     writer.write(fileInList.get(j) + "\n");
                 }
             }
+            alert = "SUCCESS";
         }
-        catch (Exception ex){
-            ex.printStackTrace();
+        catch (IOException ioException) {
+            ioException.printStackTrace();
+            throw ioException;
         }
         finally {
             if (writer != null) {
@@ -103,5 +123,6 @@ public class FileAction {
                 }
             }
         }
+        return alert;
     }
 }

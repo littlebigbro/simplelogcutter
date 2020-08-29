@@ -1,0 +1,4 @@
+07-28;07:30:44.879 DEBUG [.kernel.Default (self-tuning)'][                   SumApplCashFTaxPbs_lc]: Лог перехода storeFromWS для документа d7673475-08eb-4def-97eb-72e00ed0b00f с типом MSC_SumApplCashFTax_PBS: Результат для документа: guid=d7673475-08eb-4def-97eb-72e00ed0b00f , doctype=MSC_SumApplCashFTax_PBS , docservice=EXP
+[Лог обработки]: Начало выполнения перехода storeFromWS (Создать новый документ) ЖЦ SumApplCashFTaxPbs_lc
+Начало выполнения действия ЖЦ loadFieldValueCall (Источник АСФК: Загружает значение поля документа в переменную (параметры для версии 8.20))
+Выполняется проверка условий для экшена loadFieldValueCall, для документа с guid d7673475-08eb-4def-97eb-72e00ed0b00f
