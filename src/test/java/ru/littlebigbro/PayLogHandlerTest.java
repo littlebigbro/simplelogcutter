@@ -19,8 +19,8 @@ public class PayLogHandlerTest {
     public void initTest() {
         handler = new PayLogHandler();
         params = new HashMap<>();
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test.txt");
-        params.put("NEW_FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_output");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/test.txt");
+        params.put("NEW_FILE_PATH", "./src/test/java/resources/test_output");
         params.put("SEARCH_STRING", "d06da315-0565-472c-88e6-068619e4cfe8");
     }
 
@@ -40,19 +40,19 @@ public class PayLogHandlerTest {
         Assert.assertEquals("Не указан путь к обрабатываемому файлу", handler.getErrorMessage());
 
         handler = new PayLogHandler();
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test.txt");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/test.txt");
         handler.performingChecks(params);
         Assert.assertEquals("Поисковой запрос пуст", handler.getErrorMessage());
     }
 
     @Test
     public void wrongInputFileFormatTest() throws IOException {
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\pay.log.2020-07-28-0");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/pay.log.2020-07-28-0");
         handler.performingChecks(params);
         Assert.assertEquals("Ошибка. Неверный формат файла. Поддерживаемые форматы: .txt и .log", handler.getErrorMessage());
 
         handler = new PayLogHandler();
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/test");
         handler.performingChecks(params);
         Assert.assertEquals("Ошибка. Неверный формат файла. Поддерживаемые форматы: .txt и .log", handler.getErrorMessage());
     }
@@ -89,14 +89,14 @@ public class PayLogHandlerTest {
 
     @Test
     public void errorMessageFileIsEmptyTest() throws IOException {
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test_empty.txt");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/test_empty.txt");
         handler.performingChecks(params);
         Assert.assertEquals("Обрабатываемый файл пуст", handler.getErrorMessage());
     }
 
     @Test
     public void errorMessageFileIsNotLogTest() throws IOException {
-        params.put("FILE_PATH", "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test_not_log.txt");
+        params.put("FILE_PATH", "./src/test/java/resources/test_files/test_not_log.txt");
         handler.performingChecks(params);
         Assert.assertEquals("Выбранный файл не pay.log", handler.getErrorMessage());
     }

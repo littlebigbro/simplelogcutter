@@ -20,7 +20,7 @@ public class FileActionTest {
 
     @Test (expected = FileNotFoundException.class)
     public void readFileToListFileNotExist() throws IOException {
-        filePath = "H:\\test0.txt";
+        filePath = "./src/test/java/resources/test_files/test0.txt";
         FileAction.readFileToList(new File(filePath));
     }
 
@@ -28,10 +28,10 @@ public class FileActionTest {
     public void newFileNameGenerator() {
         Assert.assertEquals("ERROR", FileAction.newFileNameGenerator(null,null));
 
-        File file = new File("C:\\Users\\Home\\Desktop\\");
+        File file = new File("./src/test/java/resources/test_output");
         Assert.assertEquals("default_name.txt", FileAction.newFileNameGenerator(file,null));
 
-        file = new File ("H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\");
+        file = new File ("./src/test/java/resources/test_files/");
         Assert.assertEquals("test(1).txt", FileAction.newFileNameGenerator(file,"test.txt"));
     }
 

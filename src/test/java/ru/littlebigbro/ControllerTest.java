@@ -23,8 +23,8 @@ public class ControllerTest {
     @Before
     public void initTest() {
         controller = new Controller();
-        filePath = "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_files\\test.txt";
-        saveDirectoryPath = "H:\\Java\\SimpleLogCutter\\src\\test\\java\\resources\\test_output";
+        filePath = "./src/test/java/resources/test_files/test.txt";
+        saveDirectoryPath = "./src/test/java/resources/test_output";
         processingTemplate = new ProcessingTemplate();
     }
 

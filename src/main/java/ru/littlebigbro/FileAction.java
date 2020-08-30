@@ -42,6 +42,37 @@ public class FileAction {
         return readFile;
     }
 
+    public static List<String> readFileToList(InputStream inputStream) {
+        List<String> readFile;
+        BufferedReader reader = null;
+        InputStreamReader inputStreamReader = null;
+        InputStream fileInputStream = null;
+        try {
+            fileInputStream = inputStream;
+            inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+            reader = new BufferedReader(inputStreamReader);
+            Stream<String> stream = reader.lines();
+            readFile = stream.collect(Collectors.toList());
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+            throw exception;
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    inputStreamReader.close();
+                    fileInputStream.close();
+                }
+                catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+        return readFile;
+    }
+
 /**
  * Метод генерирует новое имя для файла в формате "fileName(i).format", 
  * если по предоставленному пути filepath есть файл с именем defaultName.

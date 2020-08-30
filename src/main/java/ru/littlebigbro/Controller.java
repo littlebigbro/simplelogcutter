@@ -2,13 +2,16 @@ package ru.littlebigbro;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -67,6 +70,39 @@ public class Controller {
     @FXML
     private Tooltip tooltip_RipTheDevilOutOfIt;
 
+    @FXML
+    private Button aboutButton;
+
+    @FXML
+    private Tooltip tooltip_AboutButton;
+
+
+    @FXML
+    void aboutButtonAction(ActionEvent event) {
+        InputStream is = getClass().getResourceAsStream("/README.txt");
+        List<String> textInList = FileAction.readFileToList(is);
+        StringBuilder sb = new StringBuilder();
+        for (String line: textInList) {
+            sb.append(line).append("\n");
+        }
+
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setText(sb.toString());
+        StackPane aboutSceneLayout = new StackPane();
+        aboutSceneLayout.getChildren().add(textArea);
+
+        Scene aboutScene = new Scene(aboutSceneLayout, 475, 400);
+        aboutScene.getStylesheets().add("style.css");
+        textArea.setStyle("-fx-background-color: transparent;");
+
+        Stage aboutWindow = new Stage();
+        aboutWindow.setTitle("О программе");
+        aboutWindow.sizeToScene();
+        aboutWindow.setScene(aboutScene);
+        aboutWindow.setResizable(false);
+        aboutWindow.show();
+    }
 
     @FXML
     void changePattenAction(ActionEvent event) {
@@ -189,6 +225,9 @@ public class Controller {
 
         tooltip_RipTheDevilOutOfIt.setText("Rip the devil out of it!");
         handlerButton.setTooltip(tooltip_RipTheDevilOutOfIt);
+
+        tooltip_AboutButton.setText("О программе");
+        aboutButton.setTooltip(tooltip_AboutButton);
     }
 
     private void alertGenerator (String title, String contentText) {
