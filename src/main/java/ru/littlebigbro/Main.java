@@ -25,7 +25,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        ResourceBundle bundle = ResourceBundle.getBundle("context_menu", new Locale("ru", "RU"));
         URL url = getClass().getClassLoader().getResource("ru.littlebigbro.fxml");
         Parent panel = FXMLLoader.load(url);
         Scene scene = new Scene(panel, 475, 340);

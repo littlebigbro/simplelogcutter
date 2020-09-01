@@ -180,7 +180,7 @@ public class Controller {
         processingTemplate.executeHandler(params);
 
         if (handler.getNewFilePath() != null) {
-            saveDirectoryPath.setText(handler.getNewFilePath());
+            saveDirectoryPath.setText(handler.getNewFilePath().substring(0, handler.getNewFilePath().lastIndexOf(File.separator)));
         }
         handlingIsSuccess = handler.getDone();
         if(!handler.getErrorMessage().equals("FALSE") || handlingIsSuccess) {

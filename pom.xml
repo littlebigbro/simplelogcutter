@@ -6,7 +6,7 @@
     <groupId>ru.littlebigbro</groupId>
     <artifactId>SimpleLogCutter</artifactId>
     <packaging>jar</packaging>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 
     <name>SimpleLogHandler</name>
 
