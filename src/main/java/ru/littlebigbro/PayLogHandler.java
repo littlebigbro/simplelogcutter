@@ -123,7 +123,7 @@ public class PayLogHandler implements Handler {
 
     @Override
     public String getNewFilePath() {
-        return newFile == null? "" : newFile.getAbsolutePath();
+        return newFile == null? "FALSE" : newFile.getAbsolutePath();
     }
 
     private List<Integer> transitionEndCalc(List<Integer> stdPatternHits, List<Integer> transitionBegin) {

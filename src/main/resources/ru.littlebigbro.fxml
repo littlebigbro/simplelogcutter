@@ -44,9 +44,9 @@
          <tooltip>
             <Tooltip fx:id="tooltip_SearchString" />
          </tooltip></TextField>
-      <Button fx:id="handlerButton" layoutX="340.0" layoutY="230.0" maxHeight="80.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#ripTheDevilOutOfIt" prefHeight="80.0" prefWidth="115.0" text="Обработать">
+      <Button fx:id="handlerButton" layoutX="340.0" layoutY="230.0" maxHeight="80.0" maxWidth="115.0" minHeight="25.0" minWidth="115.0" mnemonicParsing="false" onAction="#beatTheDevilOutOfIt" prefHeight="80.0" prefWidth="115.0" text="Обработать">
          <tooltip>
-            <Tooltip fx:id="tooltip_RipTheDevilOutOfIt" />
+            <Tooltip fx:id="tooltip_BeatTheDevilOutOfIt" />
          </tooltip></Button>
       <Label layoutX="20.0" layoutY="260.0" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" text="Поисковой запрос" />
       <Separator layoutX="20.0" layoutY="190.0" maxHeight="5.0" maxWidth="435.0" minHeight="5.0" minWidth="435.0" prefHeight="5.0" prefWidth="435.0" />

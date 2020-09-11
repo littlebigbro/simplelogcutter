@@ -68,7 +68,7 @@ public class Controller {
     private Button handlerButton;
 
     @FXML
-    private Tooltip tooltip_RipTheDevilOutOfIt;
+    private Tooltip tooltip_BeatTheDevilOutOfIt;
 
     @FXML
     private Button aboutButton;
@@ -158,7 +158,7 @@ public class Controller {
     }
 
     @FXML
-    void ripTheDevilOutOfIt(ActionEvent event) throws IOException {
+    void beatTheDevilOutOfIt(ActionEvent event) throws IOException {
         String userString = searchString.getText().trim();
         switch (patternBox.getValue()) {
             case PAYLOG_PATTERN: {
@@ -179,7 +179,7 @@ public class Controller {
         processingTemplate.setHandler(handler);
         processingTemplate.executeHandler(params);
 
-        if (handler.getNewFilePath() != null) {
+        if (handler.getNewFilePath() != null && !handler.getNewFilePath().equals("FALSE")) {
             saveDirectoryPath.setText(handler.getNewFilePath().substring(0, handler.getNewFilePath().lastIndexOf(File.separator)));
         }
         handlingIsSuccess = handler.getDone();
@@ -223,8 +223,8 @@ public class Controller {
         tooltip_SearchString.setText("Укажие GUID");
         searchString.setTooltip(tooltip_SearchString);
 
-        tooltip_RipTheDevilOutOfIt.setText("Rip the devil out of it!");
-        handlerButton.setTooltip(tooltip_RipTheDevilOutOfIt);
+        tooltip_BeatTheDevilOutOfIt.setText("Beat the devil out of it!");
+        handlerButton.setTooltip(tooltip_BeatTheDevilOutOfIt);
 
         tooltip_AboutButton.setText("О программе");
         aboutButton.setTooltip(tooltip_AboutButton);

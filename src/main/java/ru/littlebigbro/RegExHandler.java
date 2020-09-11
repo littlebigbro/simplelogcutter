@@ -143,7 +143,7 @@ public class RegExHandler implements Handler {
 
     @Override
     public String getNewFilePath() {
-        return newFile == null ? "" : newFile.getAbsolutePath();
+        return newFile == null ? "FALSE" : newFile.getAbsolutePath();
     }
 
     private boolean checkInTransition(List<Integer> searchHits, int begin, int end) {
